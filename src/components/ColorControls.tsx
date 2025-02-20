@@ -45,9 +45,6 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
     onChange(hsvToRgb(newHsv[0], newHsv[1], newHsv[2]));
   };
 
-  const rgbToHex = (r: number, g: number, b: number) =>
-    "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("");
-
   const handleColorPickerChange = (color: any) => {
     const { r, g, b } = color.rgb;
     onChange([r, g, b]);

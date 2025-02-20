@@ -29,7 +29,7 @@ export default function Index() {
 
   // The current color mode is determined by the selected color's type
   const selectedColor = savedColors.find((c) => c.id === selectedId);
-  const currentMode: ColorMode = selectedColor?.type || "point";
+  // const [currentMode, setCurrentMode] = useState<string>("rgb");
 
   const handleColorChange = useCallback(
     (newRgb: RGB) => {

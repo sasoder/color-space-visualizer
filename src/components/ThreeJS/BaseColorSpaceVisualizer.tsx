@@ -23,22 +23,11 @@ export interface VertexLabel {
   label: string;
 }
 
-export abstract class BaseColorSpaceVisualizer {
-  protected abstract createGeometry(): THREE.BufferGeometry;
-  protected abstract getVertexLabels(): VertexLabel[];
-  protected abstract convertToSpaceCoordinates(
-    rgb: RGB
-  ): [number, number, number];
-}
-
 export interface ColorSpaceContainerProps extends ColorSpaceVisualizerProps {
   children: (props: { scene: THREE.Scene }) => React.ReactElement;
 }
 
 export function ColorSpaceContainer({
-  rgb,
-  savedColors,
-  selectedId,
   shouldReset,
   onResetComplete,
   showGrid = false,

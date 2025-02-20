@@ -6,10 +6,14 @@ import {
   createVertexLabel,
 } from "./BaseColorSpaceVisualizer";
 
+interface RGBCubeContentProps extends ColorSpaceVisualizerProps {
+  scene: THREE.Scene;
+}
+
 export function RGBCube(props: ColorSpaceVisualizerProps) {
   return (
     <ColorSpaceContainer {...props}>
-      <RGBCubeContent {...props} />
+      {({ scene }) => <RGBCubeContent {...props} scene={scene} />}
     </ColorSpaceContainer>
   );
 }
@@ -19,7 +23,7 @@ function RGBCubeContent({
   savedColors,
   selectedId,
   scene,
-}: ColorSpaceVisualizerProps & { scene: THREE.Scene }) {
+}: RGBCubeContentProps) {
   const sceneRef = useRef<{
     points: Map<string, THREE.Mesh>;
     currentPoint?: THREE.Mesh;
