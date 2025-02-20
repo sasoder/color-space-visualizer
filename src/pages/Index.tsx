@@ -138,16 +138,20 @@ export default function Index() {
           </div>
         </div>
 
-        <Separator className="flex-none mb-8 border-black/10" />
+        <Separator className="flex-none border-black/10" />
 
         {/* Controls */}
-        <div className="px-8 pb-8 flex-none">
+        <div className="flex-none">
           <ColorControls rgb={currentRgb} onChange={handleColorChange} />
         </div>
       </div>
 
-      {/* Sidebar */}
-      <Separator orientation="vertical" className="flex-none border-black/10" />
+      <div className="flex-none">
+        <Separator
+          orientation="vertical"
+          className="h-full border-black/10 p-0"
+        />
+      </div>
 
       <div className="w-80 flex-none p-8 overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
