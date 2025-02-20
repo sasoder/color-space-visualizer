@@ -16,7 +16,7 @@ export function HLSDiamond(props: ColorSpaceVisualizerProps) {
 
 // Cone parameters for proper HLS mapping
 const CONE_HEIGHT = 1.0; // Normalized height for each cone
-const CONE_RADIUS = 0.5; // Normalized radius at widest point
+const CONE_RADIUS = 0.62; // Normalized radius at widest point
 const CENTER_X = 0.5; // Center X position
 const CENTER_Z = 0.5; // Center Z position
 const Y_POS_TOP = 1.0; // Top of upper cone
@@ -66,17 +66,16 @@ function HLSDiamondContent({
         label: "Blue",
       },
 
-      // Green (60° + offset)
+      // Cyan (60° + offset)
       {
         pos: [
           CENTER_X + CONE_RADIUS * Math.cos(Math.PI / 3 + ROTATION_OFFSET),
           0.5,
           CENTER_Z + CONE_RADIUS * Math.sin(Math.PI / 3 + ROTATION_OFFSET),
         ] as [number, number, number],
-        label: "Green",
+        label: "Cyan",
       },
-
-      // Cyan (120° + offset)
+      // Green (120° + offset)
       {
         pos: [
           CENTER_X +
@@ -85,20 +84,18 @@ function HLSDiamondContent({
           CENTER_Z +
             CONE_RADIUS * Math.sin((2 * Math.PI) / 3 + ROTATION_OFFSET),
         ] as [number, number, number],
-        label: "Cyan",
+        label: "Green",
       },
-
-      // Red (180° + offset)
+      // Yellow (180° + offset)
       {
         pos: [
           CENTER_X + CONE_RADIUS * Math.cos(Math.PI + ROTATION_OFFSET),
           0.5,
           CENTER_Z + CONE_RADIUS * Math.sin(Math.PI + ROTATION_OFFSET),
         ] as [number, number, number],
-        label: "Red",
+        label: "Yellow",
       },
-
-      // Magenta (240° + offset)
+      // Red (240° + offset)
       {
         pos: [
           CENTER_X +
@@ -107,10 +104,10 @@ function HLSDiamondContent({
           CENTER_Z +
             CONE_RADIUS * Math.sin((4 * Math.PI) / 3 + ROTATION_OFFSET),
         ] as [number, number, number],
-        label: "Magenta",
+        label: "Red",
       },
 
-      // Yellow (300° + offset)
+      // Magenta (300° + offset)
       {
         pos: [
           CENTER_X +
@@ -119,7 +116,7 @@ function HLSDiamondContent({
           CENTER_Z +
             CONE_RADIUS * Math.sin((5 * Math.PI) / 3 + ROTATION_OFFSET),
         ] as [number, number, number],
-        label: "Yellow",
+        label: "Magenta",
       },
     ];
 
