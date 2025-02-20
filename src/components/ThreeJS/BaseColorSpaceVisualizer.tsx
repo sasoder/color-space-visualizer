@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RGB, SavedColor } from "@/types/color";
 import React from "react";
 
@@ -31,6 +31,10 @@ export abstract class BaseColorSpaceVisualizer {
   ): [number, number, number];
 }
 
+export interface ColorSpaceContainerProps extends ColorSpaceVisualizerProps {
+  children: (props: { scene: THREE.Scene }) => React.ReactElement;
+}
+
 export function ColorSpaceContainer({
   rgb,
   savedColors,
@@ -39,7 +43,7 @@ export function ColorSpaceContainer({
   onResetComplete,
   showGrid = false,
   children,
-}: ColorSpaceVisualizerProps & { children: React.ReactNode }) {
+}: ColorSpaceContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{
     scene: THREE.Scene;
@@ -187,9 +191,12 @@ export function ColorSpaceContainer({
   return (
     <div ref={containerRef} className="w-full h-full relative">
       {sceneRef.current?.scene &&
-        React.cloneElement(children as React.ReactElement, {
-          scene: sceneRef.current.scene,
-        })}
+        React.cloneElement(
+          children({ scene: sceneRef.current.scene }) as React.ReactElement,
+          {
+            scene: sceneRef.current.scene,
+          }
+        )}
     </div>
   );
 }
@@ -238,7 +245,7 @@ function createGridSystem(scene: THREE.Scene): THREE.GridHelper[] {
       material.opacity = 0.1;
       material.transparent = true;
     } else if (Array.isArray(material)) {
-      material.forEach((mat: THREE.Material) => {
+      (material as THREE.Material[]).forEach((mat) => {
         mat.opacity = 0.1;
         mat.transparent = true;
       });

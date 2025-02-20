@@ -7,10 +7,14 @@ import {
 } from "./BaseColorSpaceVisualizer";
 import { rgbToHls } from "@/lib/color-utils";
 
+interface HLSDiamondContentProps extends ColorSpaceVisualizerProps {
+  scene: THREE.Scene;
+}
+
 export function HLSDiamond(props: ColorSpaceVisualizerProps) {
   return (
     <ColorSpaceContainer {...props}>
-      <HLSDiamondContent {...props} />
+      {({ scene }) => <HLSDiamondContent {...props} scene={scene} />}
     </ColorSpaceContainer>
   );
 }
@@ -28,7 +32,7 @@ function HLSDiamondContent({
   savedColors,
   selectedId,
   scene,
-}: ColorSpaceVisualizerProps & { scene: THREE.Scene }) {
+}: HLSDiamondContentProps) {
   const sceneRef = useRef<{
     points: Map<string, THREE.Mesh>;
     currentPoint?: THREE.Mesh;
