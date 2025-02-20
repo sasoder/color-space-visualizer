@@ -127,29 +127,9 @@ function HLSDiamondContent({
       createVertexLabel(scene, pos, label);
     });
 
-    // Create current point indicator
-    const currentPointGeometry = new THREE.SphereGeometry(0.02);
-    const currentPointMaterial = new THREE.MeshBasicMaterial({
-      color: new THREE.Color(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255),
-      transparent: true,
-      opacity: 0.7,
-    });
-    const currentPoint = new THREE.Mesh(
-      currentPointGeometry,
-      currentPointMaterial
-    );
-
-    // Set initial position using the hlsToCartesian mapping.
-    const [h, l, s] = rgbToHls(rgb[0], rgb[1], rgb[2]);
-    const [x, y, z] = hlsToCartesian(h / 360, l / 100, s / 100);
-    currentPoint.position.set(x, y, z);
-
-    scene.add(currentPoint);
-
     // Store references for later cleanup/updating
     sceneRef.current = {
       points: new Map(),
-      currentPoint,
       diamond,
     };
 
@@ -162,16 +142,30 @@ function HLSDiamondContent({
         }
       });
       scene.remove(diamond);
-      currentPoint.geometry.dispose();
-      currentPoint.material.dispose();
-      scene.remove(currentPoint);
     };
-  }, [scene, rgb]);
+  }, [scene]);
 
-  // Update current point position when rgb changes
+  // Create and update current point
   useEffect(() => {
-    if (!sceneRef.current?.currentPoint) return;
+    if (!sceneRef.current) return;
 
+    // Create current point if it doesn't exist
+    if (!sceneRef.current.currentPoint) {
+      const currentPointGeometry = new THREE.SphereGeometry(0.02);
+      const currentPointMaterial = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255),
+        transparent: true,
+        opacity: 0.7,
+      });
+      const currentPoint = new THREE.Mesh(
+        currentPointGeometry,
+        currentPointMaterial
+      );
+      scene.add(currentPoint);
+      sceneRef.current.currentPoint = currentPoint;
+    }
+
+    // Update position and color
     const [r, g, b] = rgb;
     const [h, l, s] = rgbToHls(r, g, b);
     const [x, y, z] = hlsToCartesian(
@@ -184,7 +178,21 @@ function HLSDiamondContent({
     const material = sceneRef.current.currentPoint
       .material as THREE.MeshBasicMaterial;
     material.color.setRGB(r / 255, g / 255, b / 255);
-  }, [rgb]);
+
+    return () => {
+      if (sceneRef.current?.currentPoint) {
+        const material = sceneRef.current.currentPoint.material;
+        if (Array.isArray(material)) {
+          material.forEach((m) => m.dispose());
+        } else {
+          material.dispose();
+        }
+        sceneRef.current.currentPoint.geometry.dispose();
+        scene.remove(sceneRef.current.currentPoint);
+        sceneRef.current.currentPoint = undefined;
+      }
+    };
+  }, [rgb, scene]);
 
   // Update saved points
   useEffect(() => {
@@ -292,7 +300,7 @@ function hlsToCartesian(
   const angle = angleDegrees * (Math.PI / 180);
 
   // Map lightness linearly to the vertical position between Y_POS_BOTTOM and Y_POS_TOP.
-  const y = Y_POS_BOTTOM + (Y_POS_TOP - Y_POS_BOTTOM) * l;
+  const y = Y_POS_BOTTOM - 0.5 + (Y_POS_TOP - Y_POS_BOTTOM) * l * 2;
 
   // Compute effective saturation.
   // This makes sure that full saturation is only achieved when l is 0.5.
