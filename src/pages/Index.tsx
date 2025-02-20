@@ -121,6 +121,7 @@ export default function Index() {
                 selectedId={selectedId}
                 shouldReset={shouldResetViews}
                 onResetComplete={handleResetComplete}
+                showGrid={showGrid}
               />
             </div>
             <div className="w-full h-full">

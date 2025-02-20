@@ -193,8 +193,8 @@ export function ColorSpaceContainer({
 // Helper function to create the grid system
 function createGridSystem(scene: THREE.Scene): THREE.GridHelper[] {
   const gridSize = 2.5;
-  const divisions = 10;
-  const numGrids = 10;
+  const divisions = 5;
+  const numGrids = 5;
   const gridSpacing = (gridSize * 2) / numGrids;
   const gridHelpers: THREE.GridHelper[] = [];
 

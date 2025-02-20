@@ -45,8 +45,7 @@ export function SavedColorsList({
               style={{ background: bgColor }}
             />
             <span className="flex-grow font-normal">
-              {color.type === "point" ? "Point" : "Volume"}{" "}
-              {color.id.slice(0, 4)}
+              {color.type === "point" ? "Point" : "Volume"}
             </span>
             {colors.length > 1 && (
               <Button
