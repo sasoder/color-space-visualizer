@@ -4,10 +4,10 @@ import { ColorControls } from "@/components/ColorControls";
 import { SavedColorsList } from "@/components/SavedColorsList";
 import { SavedColor, ColorMode, RGB } from "@/types/color";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Plus, RotateCcw } from "lucide-react";
 
 export default function Index() {
-  // Initialize with a default point
   const [savedColors, setSavedColors] = useState<SavedColor[]>([
     {
       id: "initial",
@@ -16,6 +16,15 @@ export default function Index() {
     },
   ]);
   const [selectedId, setSelectedId] = useState("initial");
+  const [shouldResetViews, setShouldResetViews] = useState(false);
+
+  const handleResetAllViews = useCallback(() => {
+    setShouldResetViews(true);
+  }, []);
+
+  const handleResetComplete = useCallback(() => {
+    setShouldResetViews(false);
+  }, []);
 
   // The current color mode is determined by the selected color's type
   const selectedColor = savedColors.find((c) => c.id === selectedId);
@@ -61,49 +70,86 @@ export default function Index() {
     selectedColor?.type === "point" ? selectedColor.rgb : [127, 127, 127];
 
   return (
-    <div className="min-h-screen bg-background p-4 flex flex-col gap-4">
-      <h1 className="text-2xl font-bold text-foreground">
-        Color Space Visualization
-      </h1>
+    <div className="h-screen w-full flex overflow-hidden">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Header */}
+        <header className="p-8 pb-6 flex-none">
+          <h1 className="text-4xl font-normal text-black">
+            Color Space Visualization
+          </h1>
+          <p className="text-sm text-gray-500">
+            A visualization of the RGB color space. With the font Tinos.
+          </p>
+        </header>
 
-      <div className="grid grid-cols-4 gap-4 flex-grow">
-        <div className="flex flex-col gap-4">
-          <div className="bg-card p-4 rounded-lg shadow-lg">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">Saved Colors</h2>
-              <Button size="sm" onClick={handleAddNewPoint}>
-                <Plus className="h-4 w-4 mr-1" />
-                Add Point
-              </Button>
+        <Separator className="flex-none border-black/10" />
+
+        {/* Visualization Grid */}
+        <div className="p-0 flex-1 min-h-0 relative">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleResetAllViews}
+            className="absolute top-4 left-4 z-10"
+          >
+            <RotateCcw className="h-4 w-4" />
+          </Button>
+          <div className="grid grid-cols-3 gap-0 h-full">
+            <div className="w-full h-full">
+              <RGBCube
+                rgb={currentRgb}
+                savedColors={savedColors}
+                selectedId={selectedId}
+                shouldReset={shouldResetViews}
+                onResetComplete={handleResetComplete}
+              />
             </div>
-            <SavedColorsList
-              colors={savedColors}
-              selectedId={selectedId}
-              onSelect={setSelectedId}
-              onRemove={handleRemoveColor}
-            />
+            <div className="w-full h-full">
+              <RGBCube
+                rgb={currentRgb}
+                savedColors={savedColors}
+                selectedId={selectedId}
+                shouldReset={shouldResetViews}
+                onResetComplete={handleResetComplete}
+              />
+            </div>
+            <div className="w-full h-full">
+              <RGBCube
+                rgb={currentRgb}
+                savedColors={savedColors}
+                selectedId={selectedId}
+                shouldReset={shouldResetViews}
+                onResetComplete={handleResetComplete}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="col-span-3 grid grid-cols-3 gap-4">
-          <div className="aspect-square bg-card rounded-lg overflow-hidden shadow-lg">
-            <RGBCube
-              rgb={currentRgb}
-              savedColors={savedColors}
-              selectedId={selectedId}
-            />
-          </div>
-          <div className="aspect-square bg-card rounded-lg overflow-hidden shadow-lg">
-            {/* HLS Double-Cone will go here */}
-          </div>
-          <div className="aspect-square bg-card rounded-lg overflow-hidden shadow-lg">
-            {/* HSV Cone will go here */}
-          </div>
+        <Separator className="flex-none mb-8 border-black/10" />
+
+        {/* Controls */}
+        <div className="px-8 pb-8 flex-none">
+          <ColorControls rgb={currentRgb} onChange={handleColorChange} />
         </div>
       </div>
 
-      <div className="bg-card p-4 rounded-lg shadow-lg">
-        <ColorControls rgb={currentRgb} onChange={handleColorChange} />
+      {/* Sidebar */}
+      <Separator orientation="vertical" className="flex-none border-black/10" />
+
+      <div className="w-80 flex-none p-8 overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-normal">Saved Domains</h2>
+          <Button variant="outline" size="sm" onClick={handleAddNewPoint}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+        <SavedColorsList
+          colors={savedColors}
+          selectedId={selectedId}
+          onSelect={setSelectedId}
+          onRemove={handleRemoveColor}
+        />
       </div>
     </div>
   );

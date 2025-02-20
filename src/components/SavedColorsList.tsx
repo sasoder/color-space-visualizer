@@ -16,7 +16,7 @@ export function SavedColorsList({
   onRemove,
 }: SavedColorsListProps) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       {colors.map((color) => {
         const isSelected = color.id === selectedId;
         const bgColor =
@@ -30,24 +30,29 @@ export function SavedColorsList({
           <div
             key={color.id}
             className={`
-              flex items-center gap-2 p-2 rounded-md cursor-pointer
-              ${isSelected ? "ring-2 ring-primary" : "hover:bg-accent"}
+              flex items-center gap-3 p-2 cursor-pointer border
+              ${
+                isSelected
+                  ? "border-black"
+                  : "border-transparent hover:border-black/20"
+              }
+              transition-colors duration-150
             `}
             onClick={() => onSelect(color.id)}
           >
             <div
-              className="w-6 h-6 rounded-md"
+              className="w-6 h-6 border border-black/10"
               style={{ background: bgColor }}
             />
-            <span className="flex-grow">
+            <span className="flex-grow font-normal">
               {color.type === "point" ? "Point" : "Volume"}{" "}
               {color.id.slice(0, 4)}
             </span>
             {colors.length > 1 && (
               <Button
-                variant="ghost"
+                variant="outline"
                 size="icon"
-                className="h-6 w-6"
+                className="h-6 w-6 "
                 onClick={(e) => {
                   e.stopPropagation();
                   onRemove(color.id);
