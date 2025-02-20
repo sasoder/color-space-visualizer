@@ -1,4 +1,4 @@
-export function rgbToHsl(
+export function rgbToHls(
   r: number,
   g: number,
   b: number,
@@ -35,7 +35,7 @@ export function rgbToHsl(
     h = (h / 6) * 360;
   }
 
-  return [h, s * 100, l * 100];
+  return [h, l * 100, s * 100];
 }
 
 export function rgbToHsv(
@@ -78,13 +78,13 @@ export function rgbToHsv(
   return [h, s * 100, v * 100];
 }
 
-export function hslToRgb(
+export function hlsToRgb(
   h: number,
-  s: number,
-  l: number
+  l: number,
+  s: number
 ): [number, number, number] {
-  s /= 100;
   l /= 100;
+  s /= 100;
 
   h = h % 360;
   h /= 360;

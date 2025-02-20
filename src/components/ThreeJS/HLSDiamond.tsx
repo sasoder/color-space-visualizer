@@ -5,7 +5,8 @@ import {
   ColorSpaceVisualizerProps,
   createVertexLabel,
 } from "./BaseColorSpaceVisualizer";
-import { rgbToHsl } from "@/lib/color-utils";
+import { rgbToHls } from "@/lib/color-utils";
+
 export function HLSDiamond(props: ColorSpaceVisualizerProps) {
   return (
     <ColorSpaceContainer {...props}>
@@ -40,6 +41,8 @@ function HLSDiamondContent({
     const diamond = createDiamondGeometry(scene);
 
     // Create vertex labels
+    // Use a 30° offset so that the vertices line up with the following mapping:
+    // Blue: 30°, Cyan: 90°, Green: 150°, Yellow: 210°, Red: 270°, Magenta: 330°.
     const ROTATION_OFFSET = Math.PI / 6; // 30 degrees offset
 
     // Calculated vertex positions
@@ -56,7 +59,7 @@ function HLSDiamondContent({
         label: "White",
       },
 
-      // Blue (0° + offset)
+      // Blue (should appear at 30°)
       {
         pos: [
           CENTER_X + CONE_RADIUS * Math.cos(0 + ROTATION_OFFSET),
@@ -66,7 +69,7 @@ function HLSDiamondContent({
         label: "Blue",
       },
 
-      // Cyan (60° + offset)
+      // Cyan (should appear at 90°)
       {
         pos: [
           CENTER_X + CONE_RADIUS * Math.cos(Math.PI / 3 + ROTATION_OFFSET),
@@ -75,7 +78,7 @@ function HLSDiamondContent({
         ] as [number, number, number],
         label: "Cyan",
       },
-      // Green (120° + offset)
+      // Green (should appear at 150°)
       {
         pos: [
           CENTER_X +
@@ -86,7 +89,7 @@ function HLSDiamondContent({
         ] as [number, number, number],
         label: "Green",
       },
-      // Yellow (180° + offset)
+      // Yellow (should appear at 210°)
       {
         pos: [
           CENTER_X + CONE_RADIUS * Math.cos(Math.PI + ROTATION_OFFSET),
@@ -95,7 +98,7 @@ function HLSDiamondContent({
         ] as [number, number, number],
         label: "Yellow",
       },
-      // Red (240° + offset)
+      // Red (should appear at 270°)
       {
         pos: [
           CENTER_X +
@@ -107,7 +110,7 @@ function HLSDiamondContent({
         label: "Red",
       },
 
-      // Magenta (300° + offset)
+      // Magenta (should appear at 330°)
       {
         pos: [
           CENTER_X +
@@ -136,8 +139,8 @@ function HLSDiamondContent({
       currentPointMaterial
     );
 
-    // Set initial position
-    const [h, l, s] = rgbToHsl(rgb[0], rgb[1], rgb[2]);
+    // Set initial position using the hlsToCartesian mapping.
+    const [h, l, s] = rgbToHls(rgb[0], rgb[1], rgb[2]);
     const [x, y, z] = hlsToCartesian(h / 360, l / 100, s / 100);
     currentPoint.position.set(x, y, z);
 
@@ -151,7 +154,7 @@ function HLSDiamondContent({
     };
 
     return () => {
-      // Cleanup
+      // Cleanup diamond geometry
       diamond.traverse((child) => {
         if (child instanceof THREE.Mesh) {
           child.geometry.dispose();
@@ -165,17 +168,16 @@ function HLSDiamondContent({
     };
   }, [scene, rgb]);
 
-  // Update current point position
+  // Update current point position when rgb changes
   useEffect(() => {
     if (!sceneRef.current?.currentPoint) return;
 
     const [r, g, b] = rgb;
-    const [h, l, s] = rgbToHsl(r, g, b);
-    // Normalize HLS values to 0-1 range
+    const [h, l, s] = rgbToHls(r, g, b);
     const [x, y, z] = hlsToCartesian(
       h / 360, // Normalize hue from 0-360 to 0-1
-      l / 100, // Normalize lightness from 0-100 to 0-1
-      s / 100 // Normalize saturation from 0-100 to 0-1
+      l / 100, // Normalize lightness
+      s / 100 // Normalize saturation
     );
 
     sceneRef.current.currentPoint.position.set(x, y, z);
@@ -189,7 +191,7 @@ function HLSDiamondContent({
     if (!sceneRef.current) return;
     const points = sceneRef.current.points;
 
-    // Remove points that are no longer in savedColors
+    // Remove points that no longer exist
     for (const [id, point] of points.entries()) {
       if (!savedColors.find((c) => c.id === id)) {
         scene.remove(point);
@@ -202,13 +204,8 @@ function HLSDiamondContent({
       if (color.type !== "point") return;
 
       const [r, g, b] = color.rgb;
-      const [h, l, s] = rgbToHsl(r, g, b);
-      // Normalize HLS values to 0-1 range
-      const [x, y, z] = hlsToCartesian(
-        h / 360, // Normalize hue from 0-360 to 0-1
-        l / 100, // Normalize lightness from 0-100 to 0-1
-        s / 100 // Normalize saturation from 0-100 to 0-1
-      );
+      const [h, l, s] = rgbToHls(r, g, b);
+      const [x, y, z] = hlsToCartesian(h / 360, l / 100, s / 100);
 
       let point = points.get(color.id);
 
@@ -247,7 +244,7 @@ function createDiamondGeometry(scene: THREE.Scene): THREE.Group {
   const coneHeight = CONE_HEIGHT;
   const coneRadius = CONE_RADIUS;
 
-  // Create the geometry for a cone
+  // Create geometry for a cone
   const coneGeometry = new THREE.ConeGeometry(coneRadius, coneHeight, segments);
   const material = new THREE.LineBasicMaterial({
     color: 0x000000,
@@ -257,11 +254,11 @@ function createDiamondGeometry(scene: THREE.Scene): THREE.Group {
   // Create edge geometry from the cone geometry
   const edgesGeometry = new THREE.EdgesGeometry(coneGeometry);
 
-  // Top cone with edges
+  // Top cone (upper half)
   const upperCone = new THREE.LineSegments(edgesGeometry.clone(), material);
   upperCone.position.set(CENTER_X, Y_POS_TOP, CENTER_Z);
 
-  // Bottom cone with edges
+  // Bottom cone (inverted lower half)
   const lowerCone = new THREE.LineSegments(edgesGeometry.clone(), material);
   lowerCone.rotation.x = Math.PI;
   lowerCone.position.set(CENTER_X, Y_POS_BOTTOM, CENTER_Z);
@@ -272,29 +269,41 @@ function createDiamondGeometry(scene: THREE.Scene): THREE.Group {
 
   return group;
 }
-// Helper function to convert HLS coordinates to Cartesian coordinates
-function hlsToCartesian(
-  h: number, // 0-1 (from 0-360 degrees)
-  l: number, // 0-1 (from 0-100%)
-  s: number // 0-1 (from 0-100%)
-): [number, number, number] {
-  // Convert hue to angle (in radians)
-  const angle = h * 2 * Math.PI + Math.PI / 6; // Add 30-degree offset to match the diamond orientation
 
-  // Calculate the vertical position (y)
-  // When l = 0, y should be at bottom (black)
-  // When l = 1, y should be at top (white)
-  // When l = 0.5, y should be at middle (maximum saturation possible)
+// Helper function to convert HLS coordinates to Cartesian coordinates.
+// Now the mapping uses the formula:
+//    angle (in degrees) = 270° - (hue in degrees)
+// so that:
+//    Red (0°) maps to 270°, Yellow (60°) maps to 210°,
+//    Green (120°) maps to 150°, Cyan (180°) maps to 90°,
+//    Blue (240°) maps to 30°, and Magenta (300°) maps to 330°.
+// Lightness is mapped linearly to y (with 0 = black at bottom, 1 = white at top)
+// and saturation is mapped radially with a maximum at l = 0.5 (the middle plane).
+function hlsToCartesian(
+  h: number, // 0-1 (representing hue from 0-360°)
+  l: number, // 0-1 (representing lightness from 0-100%)
+  s: number // 0-1 (representing saturation from 0-100%)
+): [number, number, number] {
+  // Convert normalized hue to degrees:
+  const hueDegrees = h * 360;
+  // Adjust the angle so that red (0°) goes to 270°,
+  // yellow (60°) to 210°, green (120°) to 150°, etc.
+  const angleDegrees = 270 - hueDegrees;
+  const angle = angleDegrees * (Math.PI / 180);
+
+  // Map lightness linearly to the vertical position between Y_POS_BOTTOM and Y_POS_TOP.
   const y = Y_POS_BOTTOM + (Y_POS_TOP - Y_POS_BOTTOM) * l;
 
-  // Calculate the maximum possible radius at this lightness level
-  // The radius should be maximum at l = 0.5 and decrease linearly to 0 at l = 0 or l = 1
-  const maxPossibleRadius = CONE_RADIUS * (1 - Math.abs(2 * l - 1));
+  // Compute effective saturation.
+  // This makes sure that full saturation is only achieved when l is 0.5.
+  // When l is near 0 or 1 the effective saturation is reduced.
+  const effectiveS = s * (1 - Math.abs(l - 0.5) * 2);
 
-  // Scale the radius by saturation
-  const radius = maxPossibleRadius * s;
+  // The maximum (horizontal) radius is achieved at l = 0.5.
+  // Colors with lower or higher lightness will have decreased chroma.
+  const radius = CONE_RADIUS * effectiveS;
 
-  // Calculate x and z coordinates based on hue angle and radius
+  // Compute x and z coordinates using the angle.
   const x = CENTER_X + radius * Math.cos(angle);
   const z = CENTER_Z + radius * Math.sin(angle);
 

@@ -1,6 +1,6 @@
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
-import { rgbToHsl, rgbToHsv, hslToRgb, hsvToRgb } from "@/lib/color-utils";
+import { rgbToHls, rgbToHsv, hlsToRgb, hsvToRgb } from "@/lib/color-utils";
 import React from "react";
 import { SketchPicker } from "react-color";
 import { Separator } from "@/components/ui/separator";
@@ -19,7 +19,7 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
   const [previousHsl, setPreviousHsl] = React.useState(0);
   const [previousHsv, setPreviousHsv] = React.useState(0);
 
-  const [h, s, l] = rgbToHsl(rgb[0], rgb[1], rgb[2], previousHsl);
+  const [h, l, s] = rgbToHls(rgb[0], rgb[1], rgb[2], previousHsl);
   const [hv, sv, v] = rgbToHsv(rgb[0], rgb[1], rgb[2], previousHsv);
 
   React.useEffect(() => {
@@ -33,10 +33,10 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
     onChange(newRgb);
   };
 
-  const handleHslChange = (index: number, value: number[]) => {
-    const newHsl = [h, s, l];
-    newHsl[index] = value[0];
-    onChange(hslToRgb(newHsl[0], newHsl[1], newHsl[2]));
+  const handleHlsChange = (index: number, value: number[]) => {
+    const newHls = [h, l, s];
+    newHls[index] = value[0];
+    onChange(hlsToRgb(newHls[0], newHls[1], newHls[2]));
   };
 
   const handleHsvChange = (index: number, value: number[]) => {
@@ -96,7 +96,7 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
         </div>
 
         <div className="flex-1">
-          <h3 className="text-xl font-normal mb-4">HSL</h3>
+          <h3 className="text-xl font-normal mb-4">HLS</h3>
           <div className="flex flex-col gap-3">
             <div>
               <Label className="text-sm font-normal">Hue</Label>
@@ -104,17 +104,7 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                 value={[h]}
                 max={360}
                 step={1}
-                onValueChange={(value: number[]) => handleHslChange(0, value)}
-                className={paperSliderStyle}
-              />
-            </div>
-            <div>
-              <Label className="text-sm font-normal">Saturation</Label>
-              <Slider
-                value={[s]}
-                max={100}
-                step={1}
-                onValueChange={(value: number[]) => handleHslChange(1, value)}
+                onValueChange={(value: number[]) => handleHlsChange(0, value)}
                 className={paperSliderStyle}
               />
             </div>
@@ -124,7 +114,17 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                 value={[l]}
                 max={100}
                 step={1}
-                onValueChange={(value: number[]) => handleHslChange(2, value)}
+                onValueChange={(value: number[]) => handleHlsChange(1, value)}
+                className={paperSliderStyle}
+              />
+            </div>
+            <div>
+              <Label className="text-sm font-normal">Saturation</Label>
+              <Slider
+                value={[s]}
+                max={100}
+                step={1}
+                onValueChange={(value: number[]) => handleHlsChange(2, value)}
                 className={paperSliderStyle}
               />
             </div>
