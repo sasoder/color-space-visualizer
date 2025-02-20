@@ -1,12 +1,12 @@
 import { useState, useCallback } from "react";
-import { RGBCube } from "@/components/RGBCube";
+import { RGBCube } from "@/components/ThreeJS/RGBCube";
 import { ColorControls } from "@/components/ColorControls";
 import { SavedColorsList } from "@/components/SavedColorsList";
 import { SavedColor, ColorMode, RGB } from "@/types/color";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Plus, RotateCcw, Grid } from "lucide-react";
-
+import { HLSDiamond } from "@/components/ThreeJS/HLSDiamond";
 export default function Index() {
   const [savedColors, setSavedColors] = useState<SavedColor[]>([
     {
@@ -75,12 +75,12 @@ export default function Index() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="p-8 pb-6 flex-none">
+        <header className="p-6 flex-none">
           <h1 className="text-4xl font-normal text-black">
-            Color Space Visualization
+            Color Space Visualiser
           </h1>
           <p className="text-sm text-gray-500">
-            A visualization of the RGB color space. With the font Tinos.
+            A visualization of different color spaces. With the font Tinos.
           </p>
         </header>
 
@@ -115,13 +115,12 @@ export default function Index() {
               />
             </div>
             <div className="w-full h-full">
-              <RGBCube
+              <HLSDiamond
                 rgb={currentRgb}
                 savedColors={savedColors}
                 selectedId={selectedId}
                 shouldReset={shouldResetViews}
                 onResetComplete={handleResetComplete}
-                showGrid={showGrid}
               />
             </div>
             <div className="w-full h-full">

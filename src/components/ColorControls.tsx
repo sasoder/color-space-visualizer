@@ -4,6 +4,11 @@ import { rgbToHsl, rgbToHsv, hslToRgb, hsvToRgb } from "@/lib/color-utils";
 import React from "react";
 import { SketchPicker } from "react-color";
 import { Separator } from "@/components/ui/separator";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface ColorControlsProps {
   rgb: [number, number, number];
@@ -43,10 +48,8 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
   const rgbToHex = (r: number, g: number, b: number) =>
     "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("");
 
-  const handleColorPickerChange = (color: string) => {
-    const r = parseInt(color.slice(1, 3), 16);
-    const g = parseInt(color.slice(3, 5), 16);
-    const b = parseInt(color.slice(5, 7), 16);
+  const handleColorPickerChange = (color: any) => {
+    const { r, g, b } = color.rgb;
     onChange([r, g, b]);
   };
 
@@ -166,13 +169,30 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
       </div>
 
       <Separator orientation="vertical" className="flex-none border-black/10" />
-      <div className="min-w-[200px]">
-        <h3 className="text-xl font-normal mb-4">Color Picker</h3>
-        <SketchPicker
-          color={rgbToHex(rgb[0], rgb[1], rgb[2])}
-          onChange={handleColorPickerChange}
-          className="rounded-none"
-        />
+      <div className="min-w-[200px] flex items-center justify-center">
+        {/* <h3 className="text-xl font-normal mb-4">Color Picker</h3> */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              className="w-12 h-12 border border-black/10 shadow-sm transition-shadow hover:shadow-md"
+              style={{ background: `rgb(${rgb.join(",")})` }}
+            />
+          </PopoverTrigger>
+          <PopoverContent
+            className="w-auto border-black/10 bg-[hsl(40_20%_94%)] p-0 shadow-lg"
+            align="end"
+            side="right"
+            alignOffset={-50}
+            sideOffset={30}
+          >
+            <SketchPicker
+              color={{ r: rgb[0], g: rgb[1], b: rgb[2] }}
+              onChange={handleColorPickerChange}
+              disableAlpha={true}
+              className="bg-[hsl(40_20%_94%)]"
+            />
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );
