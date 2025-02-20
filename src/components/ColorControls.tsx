@@ -120,7 +120,7 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                 </div>
                 <Slider
                   value={[h]}
-                  max={360}
+                  max={359}
                   step={1}
                   onValueChange={(value: number[]) => handleHlsChange(0, value)}
                   className={paperSliderStyle}
@@ -171,7 +171,7 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                 </div>
                 <Slider
                   value={[hv]}
-                  max={360}
+                  max={359}
                   step={1}
                   onValueChange={(value: number[]) => handleHsvChange(0, value)}
                   className={paperSliderStyle}
