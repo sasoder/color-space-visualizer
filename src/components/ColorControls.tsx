@@ -165,9 +165,12 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
         </div>
       </div>
 
-      <Separator orientation="vertical" className="flex-none border-black/10" />
-      <div className="min-w-[200px] flex items-center justify-center">
-        {/* <h3 className="text-xl font-normal mb-4">Color Picker</h3> */}
+      <Separator
+        orientation="vertical"
+        className="flex-none border-black/10 h-full"
+      />
+
+      <div className="min-w-[200px] flex flex-col items-center justify-center">
         <Popover>
           <PopoverTrigger asChild>
             <button
@@ -177,10 +180,8 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
           </PopoverTrigger>
           <PopoverContent
             className="w-auto border-black/10 bg-[hsl(40_20%_94%)] p-0 shadow-lg"
-            align="end"
+            align="center"
             side="right"
-            alignOffset={-50}
-            sideOffset={30}
           >
             <SketchPicker
               color={{ r: rgb[0], g: rgb[1], b: rgb[2] }}

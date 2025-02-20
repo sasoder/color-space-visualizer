@@ -2,11 +2,12 @@ import { useState, useCallback } from "react";
 import { RGBCube } from "@/components/ThreeJS/RGBCube";
 import { ColorControls } from "@/components/ColorControls";
 import { SavedColorsList } from "@/components/SavedColorsList";
-import { SavedColor, ColorMode, RGB } from "@/types/color";
+import { SavedColor, RGB } from "@/types/color";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Plus, RotateCcw, Grid } from "lucide-react";
 import { HLSDiamond } from "@/components/ThreeJS/HLSDiamond";
+import { HSVCone } from "@/components/ThreeJS/HSVCone";
 export default function Index() {
   const [savedColors, setSavedColors] = useState<SavedColor[]>([
     {
@@ -125,7 +126,7 @@ export default function Index() {
               />
             </div>
             <div className="w-full h-full">
-              <RGBCube
+              <HSVCone
                 rgb={currentRgb}
                 savedColors={savedColors}
                 selectedId={selectedId}
