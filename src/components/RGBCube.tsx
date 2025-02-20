@@ -13,6 +13,7 @@ interface RGBCubeProps {
   selectedId: string;
   shouldReset?: boolean;
   onResetComplete?: () => void;
+  showGrid?: boolean;
 }
 
 export function RGBCube({
@@ -21,6 +22,7 @@ export function RGBCube({
   selectedId,
   shouldReset,
   onResetComplete,
+  showGrid = false,
 }: RGBCubeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{
@@ -33,6 +35,7 @@ export function RGBCube({
     visibleEdges?: THREE.LineSegments;
     hiddenEdges?: THREE.LineSegments;
     cube?: THREE.Mesh;
+    gridHelpers?: THREE.GridHelper[];
   } | null>(null);
 
   // Reset view when shouldReset changes to true
@@ -41,6 +44,8 @@ export function RGBCube({
       const { camera, controls } = sceneRef.current;
       camera.position.copy(INITIAL_CAMERA_POSITION);
       controls.target.copy(INITIAL_TARGET);
+      camera.zoom = 1;
+      camera.updateProjectionMatrix();
       camera.lookAt(INITIAL_TARGET);
       controls.update();
       onResetComplete?.();
@@ -53,7 +58,7 @@ export function RGBCube({
 
     // Setup scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf2f2f2);
+    scene.background = new THREE.Color(0xf3f0eb);
 
     // Setup camera
     const width = containerRef.current.clientWidth;
@@ -197,6 +202,56 @@ export function RGBCube({
     );
     scene.add(currentPoint);
 
+    // Create scene-wide volumetric grid
+    const gridSize = 2.5; // Reduced size (25% of original 10)
+    const divisions = 10;
+    const numGrids = 10; // Number of grids in each direction
+    const gridSpacing = (gridSize * 2) / numGrids; // Space between grids
+    const gridHelpers: THREE.GridHelper[] = [];
+
+    // Create horizontal grids (XZ planes)
+    for (let i = 0; i < numGrids; i++) {
+      const y = -gridSize + i * gridSpacing;
+      const gridHelper = new THREE.GridHelper(gridSize * 2, divisions);
+      gridHelper.position.set(0, y, 0);
+      scene.add(gridHelper);
+      gridHelpers.push(gridHelper);
+    }
+
+    // Create vertical grids (XY planes)
+    for (let i = 0; i < numGrids; i++) {
+      const z = -gridSize + i * gridSpacing;
+      const gridHelper = new THREE.GridHelper(gridSize * 2, divisions);
+      gridHelper.rotation.x = Math.PI / 2;
+      gridHelper.position.set(0, 0, z);
+      scene.add(gridHelper);
+      gridHelpers.push(gridHelper);
+    }
+
+    // Create side grids (YZ planes)
+    for (let i = 0; i < numGrids; i++) {
+      const x = -gridSize + i * gridSpacing;
+      const gridHelper = new THREE.GridHelper(gridSize * 2, divisions);
+      gridHelper.rotation.z = Math.PI / 2;
+      gridHelper.position.set(x, 0, 0);
+      scene.add(gridHelper);
+      gridHelpers.push(gridHelper);
+    }
+
+    // Make all grids slightly transparent and adjust color
+    gridHelpers.forEach((grid) => {
+      const material = grid.material;
+      if (material instanceof THREE.Material) {
+        material.opacity = 0.1; // Reduced opacity to 10%
+        material.transparent = true;
+      } else if (Array.isArray(material)) {
+        (material as THREE.Material[]).forEach((mat: THREE.Material) => {
+          mat.opacity = 0.1; // Reduced opacity to 10%
+          mat.transparent = true;
+        });
+      }
+    });
+
     // Setup controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -216,6 +271,7 @@ export function RGBCube({
       visibleEdges,
       hiddenEdges,
       cube,
+      gridHelpers,
     };
 
     // Animation loop
@@ -380,6 +436,14 @@ export function RGBCube({
       }
     });
   }, [savedColors, selectedId]);
+
+  // Update grid visibility
+  useEffect(() => {
+    if (!sceneRef.current?.gridHelpers) return;
+    sceneRef.current.gridHelpers.forEach((grid) => {
+      grid.visible = showGrid;
+    });
+  }, [showGrid]);
 
   return <div ref={containerRef} className="w-full h-full relative"></div>;
 }

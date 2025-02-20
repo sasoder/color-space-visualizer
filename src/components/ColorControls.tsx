@@ -2,7 +2,7 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { rgbToHsl, rgbToHsv, hslToRgb, hsvToRgb } from "@/lib/color-utils";
 import React from "react";
-import { HexColorPicker } from "react-colorful";
+import { SketchPicker } from "react-color";
 import { Separator } from "@/components/ui/separator";
 
 interface ColorControlsProps {
@@ -168,9 +168,10 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
       <Separator orientation="vertical" className="flex-none border-black/10" />
       <div className="min-w-[200px]">
         <h3 className="text-xl font-normal mb-4">Color Picker</h3>
-        <HexColorPicker
+        <SketchPicker
           color={rgbToHex(rgb[0], rgb[1], rgb[2])}
           onChange={handleColorPickerChange}
+          className="rounded-none"
         />
       </div>
     </div>
