@@ -318,7 +318,7 @@ export default function Index() {
                   size="sm"
                   className="md:border-transparent border-input md:hidden"
                 >
-                  <Menu className="h-4 w-4" />
+                  <Plus className="h-4 w-4" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px] p-6">
@@ -377,14 +377,17 @@ export default function Index() {
             </div>
           </div>
           {/* Mobile Layout (Vertical Stack) */}
-          <div className="md:hidden flex flex-col h-full pt-2 px-8">
+          <div className="md:hidden flex flex-col h-full pt-2">
             <Tabs defaultValue="rgb" className="h-full flex flex-col">
-              <TabsList className="grid grid-cols-3 w-full gap-2">
+              <TabsList className="grid grid-cols-3 w-full gap-2 px-8">
                 <TabsTrigger value="rgb">RGB</TabsTrigger>
                 <TabsTrigger value="hls">HLS</TabsTrigger>
                 <TabsTrigger value="hsv">HSV</TabsTrigger>
               </TabsList>
-              <TabsContent value="rgb" className="h-[40vh] md:h-[45vh] flex-1">
+              <TabsContent
+                value="rgb"
+                className="h-[40vh] md:h-[45vh] flex-1 w-full"
+              >
                 <RGBCube
                   rgb={currentRgb}
                   savedColors={savedColors}
@@ -394,7 +397,10 @@ export default function Index() {
                   showGrid={showGrid}
                 />
               </TabsContent>
-              <TabsContent value="hls" className="h-[40vh] md:h-[45vh] flex-1">
+              <TabsContent
+                value="hls"
+                className="h-[40vh] md:h-[45vh] flex-1 w-full"
+              >
                 <HLSDiamond
                   rgb={currentRgb}
                   savedColors={savedColors}
@@ -404,7 +410,10 @@ export default function Index() {
                   showGrid={showGrid}
                 />
               </TabsContent>
-              <TabsContent value="hsv" className="h-[40vh] md:h-[45vh] flex-1">
+              <TabsContent
+                value="hsv"
+                className="h-[40vh] md:h-[45vh] flex-1 w-full"
+              >
                 <HSVCone
                   rgb={currentRgb}
                   savedColors={savedColors}
