@@ -49,12 +49,12 @@ function RGBCubeContent({
     // Create vertex labels
     const vertices: Array<{ pos: [number, number, number]; label: string }> = [
       { pos: [0, 0, 0], label: "Black" },
-      { pos: [1, 0, 0], label: "Red" },
-      { pos: [0, 1, 0], label: "Green" },
-      { pos: [0, 0, 1], label: "Blue" },
-      { pos: [1, 1, 0], label: "Yellow" },
-      { pos: [1, 0, 1], label: "Magenta" },
-      { pos: [0, 1, 1], label: "Cyan" },
+      { pos: [1, 0, 0], label: "Red" }, // Red on X axis
+      { pos: [0, 1, 0], label: "Blue" }, // Blue on Y axis
+      { pos: [0, 0, 1], label: "Green" }, // Green on Z axis
+      { pos: [1, 1, 0], label: "Magenta" }, // Red + Blue = Magenta
+      { pos: [1, 0, 1], label: "Yellow" }, // Red + Green = Yellow
+      { pos: [0, 1, 1], label: "Cyan" }, // Blue + Green = Cyan
       { pos: [1, 1, 1], label: "White" },
     ];
 
@@ -101,7 +101,8 @@ function RGBCubeContent({
   useEffect(() => {
     if (!sceneRef.current?.currentPoint) return;
     const [r, g, b] = rgb;
-    const position: [number, number, number] = [r / 255, g / 255, b / 255];
+    // Map RGB values to the new coordinate system
+    const position: [number, number, number] = [r / 255, b / 255, g / 255];
     sceneRef.current.currentPoint.position.set(
       position[0],
       position[1],
@@ -109,7 +110,7 @@ function RGBCubeContent({
     );
     const material = sceneRef.current.currentPoint
       .material as THREE.MeshBasicMaterial;
-    material.color.setRGB(position[0], position[1], position[2]);
+    material.color.setRGB(r / 255, g / 255, b / 255); // Keep original RGB for color
   }, [rgb]);
 
   // Update saved points
@@ -130,14 +131,15 @@ function RGBCubeContent({
       if (color.type !== "point") return;
 
       const [r, g, b] = color.rgb;
-      const position: [number, number, number] = [r / 255, g / 255, b / 255];
+      // Map RGB values to the new coordinate system
+      const position: [number, number, number] = [r / 255, b / 255, g / 255];
 
       let point = points.get(color.id);
 
       if (!point) {
         const geometry = new THREE.SphereGeometry(0.02);
         const material = new THREE.MeshBasicMaterial({
-          color: new THREE.Color(position[0], position[1], position[2]),
+          color: new THREE.Color(r / 255, g / 255, b / 255), // Keep original RGB for color
           transparent: true,
         });
         point = new THREE.Mesh(geometry, material);
@@ -147,7 +149,7 @@ function RGBCubeContent({
 
       point.position.set(position[0], position[1], position[2]);
       const material = point.material as THREE.MeshBasicMaterial;
-      material.color.setRGB(position[0], position[1], position[2]);
+      material.color.setRGB(r / 255, g / 255, b / 255); // Keep original RGB for color
 
       if (color.id === selectedId) {
         point.scale.set(1.5, 1.5, 1.5);
