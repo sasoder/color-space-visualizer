@@ -181,7 +181,11 @@ export default function Index() {
     const newPoint = {
       id: `point-${Date.now()}`,
       type: "point" as const,
-      rgb: [127, 127, 127] as RGB,
+      rgb: [
+        Math.floor(Math.random() * 256),
+        Math.floor(Math.random() * 256),
+        Math.floor(Math.random() * 256),
+      ] as RGB,
       interpolated: false,
     };
     setSavedColors((colors) => [...colors, newPoint]);
@@ -232,7 +236,7 @@ export default function Index() {
         colors.filter((c) => c.type === "point" && !c.interpolated)
       );
     }
-  }, [showInterpolation, interpolatePoints]);
+  }, [showInterpolation, interpolatePoints, savedColors]);
 
   const currentRgb: RGB =
     selectedColor?.type === "point" ? selectedColor.rgb : [127, 127, 127];
@@ -328,7 +332,7 @@ export default function Index() {
                 className="w-[300px] sm:w-[400px] p-6 flex flex-col h-full"
               >
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-normal">Saved Colors</h2>
+                  <h2 className="text-2xl font-normal">Saved Colours</h2>
                   <Button
                     variant="outline"
                     size="sm"
@@ -446,9 +450,9 @@ export default function Index() {
       </div>
 
       {/* Desktop Saved Colors List */}
-      <div className="w-80 flex-none p-8 flex flex-col h-screen hidden md:flex">
-        <div className="flex justify-between items-center mb-6 flex-none">
-          <h2 className="text-2xl font-normal">Saved Colors</h2>
+      <div className="w-80 flex-none p-8 py-0 flex flex-col h-screen hidden md:flex">
+        <div className="flex justify-between items-center mb-6 flex-none mt-6">
+          <h2 className="text-2xl font-normal">Saved Colours</h2>
           <Button variant="outline" size="sm" onClick={handleAddNewPoint}>
             <Plus className="h-4 w-4" />
           </Button>
