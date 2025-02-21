@@ -76,19 +76,24 @@ export default function Index() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="p-6 flex-none">
-          <h1 className="text-4xl font-normal text-black">
-            Color Space Visualiser
-          </h1>
-          <p className="text-sm text-gray-500">
-            A visualization of different color spaces. With the font Tinos.
-          </p>
+        <header className="flex-none p-6">
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-row items-center justify-center w-full gap-2">
+              <h1 className="text-4xl font-normal text-black">
+                Color Space Visualiser
+              </h1>
+              <img src="/favicon.png" alt="logo" className="w-10 h-10" />
+            </div>
+            <p className="text-sm text-gray-500">
+              A visualisation of different color spaces. With the font Tinos.
+            </p>
+          </div>
         </header>
 
         <Separator className="flex-none border-black/10" />
 
         {/* Visualization Grid */}
-        <div className="p-0 flex-1 min-h-0 relative">
+        <div className="flex-1 min-h-0 relative">
           <div className="absolute top-4 left-4 z-10 flex gap-2">
             <Button variant="outline" size="sm" onClick={handleResetAllViews}>
               <RotateCcw className="h-4 w-4" />

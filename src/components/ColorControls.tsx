@@ -1,7 +1,7 @@
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { rgbToHls, rgbToHsv, hlsToRgb, hsvToRgb } from "@/lib/color-utils";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { SketchPicker } from "react-color";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -9,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
 
 interface ColorControlsProps {
   rgb: [number, number, number];
@@ -50,8 +51,38 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
     onChange([r, g, b]);
   };
 
+  const handleNumericInput = (
+    value: string,
+    index: number,
+    type: "rgb" | "hls" | "hsv"
+  ) => {
+    const numValue = parseInt(value) || 0;
+    let clampedValue = numValue;
+
+    if (type === "rgb") {
+      clampedValue = Math.max(0, Math.min(255, numValue));
+      handleRgbChange(index, [clampedValue]);
+    } else if (type === "hls") {
+      if (index === 0) {
+        clampedValue = Math.max(0, Math.min(359, numValue));
+      } else {
+        clampedValue = Math.max(0, Math.min(100, numValue));
+      }
+      handleHlsChange(index, [clampedValue]);
+    } else if (type === "hsv") {
+      if (index === 0) {
+        clampedValue = Math.max(0, Math.min(359, numValue));
+      } else {
+        clampedValue = Math.max(0, Math.min(100, numValue));
+      }
+      handleHsvChange(index, [clampedValue]);
+    }
+  };
+
   const paperSliderStyle =
     "hover:bg-black/5 rounded-sm [&_[role=slider]]:rounded-sm [&_[role=slider]]:border-black/20 [&_[role=slider]]:shadow-sm [&_[role=slider]]:hover:border-black/40 [&_[role=track]]:bg-black/10 [&_[role=range]]:bg-black/20";
+
+  const inputStyle = "w-12 text-sm text-black/60 text-right tabular-nums p-0";
 
   return (
     <div className="flex items-stretch">
@@ -63,9 +94,16 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
               <div>
                 <div className="flex justify-between items-center">
                   <Label className="text-sm font-normal">Red</Label>
-                  <span className="text-sm text-black/60 tabular-nums">
-                    {Math.round(rgb[0])}
-                  </span>
+                  <Input
+                    type="number"
+                    value={Math.round(rgb[0])}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handleNumericInput(e.target.value, 0, "rgb")
+                    }
+                    className={inputStyle}
+                    min={0}
+                    max={255}
+                  />
                 </div>
                 <Slider
                   value={[rgb[0]]}
@@ -78,9 +116,16 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
               <div>
                 <div className="flex justify-between items-center">
                   <Label className="text-sm font-normal">Green</Label>
-                  <span className="text-sm text-black/60 tabular-nums">
-                    {Math.round(rgb[1])}
-                  </span>
+                  <Input
+                    type="number"
+                    value={Math.round(rgb[1])}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handleNumericInput(e.target.value, 1, "rgb")
+                    }
+                    className={inputStyle}
+                    min={0}
+                    max={255}
+                  />
                 </div>
                 <Slider
                   value={[rgb[1]]}
@@ -93,9 +138,16 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
               <div>
                 <div className="flex justify-between items-center">
                   <Label className="text-sm font-normal">Blue</Label>
-                  <span className="text-sm text-black/60 tabular-nums">
-                    {Math.round(rgb[2])}
-                  </span>
+                  <Input
+                    type="number"
+                    value={Math.round(rgb[2])}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handleNumericInput(e.target.value, 2, "rgb")
+                    }
+                    className={inputStyle}
+                    min={0}
+                    max={255}
+                  />
                 </div>
                 <Slider
                   value={[rgb[2]]}
@@ -114,9 +166,19 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
               <div>
                 <div className="flex justify-between items-center">
                   <Label className="text-sm font-normal">Hue</Label>
-                  <span className="text-sm text-black/60 tabular-nums">
-                    {Math.round(h)}°
-                  </span>
+                  <div className="flex items-center">
+                    <Input
+                      type="number"
+                      value={Math.round(h)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleNumericInput(e.target.value, 0, "hls")
+                      }
+                      className={inputStyle}
+                      min={0}
+                      max={359}
+                    />
+                    <span className="ml-1 text-sm text-black/60">°</span>
+                  </div>
                 </div>
                 <Slider
                   value={[h]}
@@ -129,9 +191,19 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
               <div>
                 <div className="flex justify-between items-center">
                   <Label className="text-sm font-normal">Lightness</Label>
-                  <span className="text-sm text-black/60 tabular-nums">
-                    {Math.round(l)}%
-                  </span>
+                  <div className="flex items-center">
+                    <Input
+                      type="number"
+                      value={Math.round(l)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleNumericInput(e.target.value, 1, "hls")
+                      }
+                      className={inputStyle}
+                      min={0}
+                      max={100}
+                    />
+                    <span className="ml-1 text-sm text-black/60">%</span>
+                  </div>
                 </div>
                 <Slider
                   value={[l]}
@@ -144,9 +216,19 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
               <div>
                 <div className="flex justify-between items-center">
                   <Label className="text-sm font-normal">Saturation</Label>
-                  <span className="text-sm text-black/60 tabular-nums">
-                    {Math.round(s)}%
-                  </span>
+                  <div className="flex items-center">
+                    <Input
+                      type="number"
+                      value={Math.round(s)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleNumericInput(e.target.value, 2, "hls")
+                      }
+                      className={inputStyle}
+                      min={0}
+                      max={100}
+                    />
+                    <span className="ml-1 text-sm text-black/60">%</span>
+                  </div>
                 </div>
                 <Slider
                   value={[s]}
@@ -165,9 +247,19 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
               <div>
                 <div className="flex justify-between items-center">
                   <Label className="text-sm font-normal">Hue</Label>
-                  <span className="text-sm text-black/60 tabular-nums">
-                    {Math.round(hv)}°
-                  </span>
+                  <div className="flex items-center">
+                    <Input
+                      type="number"
+                      value={Math.round(hv)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleNumericInput(e.target.value, 0, "hsv")
+                      }
+                      className={inputStyle}
+                      min={0}
+                      max={359}
+                    />
+                    <span className="ml-1 text-sm text-black/60">°</span>
+                  </div>
                 </div>
                 <Slider
                   value={[hv]}
@@ -180,9 +272,19 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
               <div>
                 <div className="flex justify-between items-center">
                   <Label className="text-sm font-normal">Saturation</Label>
-                  <span className="text-sm text-black/60 tabular-nums">
-                    {Math.round(sv)}%
-                  </span>
+                  <div className="flex items-center">
+                    <Input
+                      type="number"
+                      value={Math.round(sv)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleNumericInput(e.target.value, 1, "hsv")
+                      }
+                      className={inputStyle}
+                      min={0}
+                      max={100}
+                    />
+                    <span className="ml-1 text-sm text-black/60">%</span>
+                  </div>
                 </div>
                 <Slider
                   value={[sv]}
@@ -195,9 +297,19 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
               <div>
                 <div className="flex justify-between items-center">
                   <Label className="text-sm font-normal">Value</Label>
-                  <span className="text-sm text-black/60 tabular-nums">
-                    {Math.round(v)}%
-                  </span>
+                  <div className="flex items-center">
+                    <Input
+                      type="number"
+                      value={Math.round(v)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleNumericInput(e.target.value, 2, "hsv")
+                      }
+                      className={inputStyle}
+                      min={0}
+                      max={100}
+                    />
+                    <span className="ml-1 text-sm text-black/60">%</span>
+                  </div>
                 </div>
                 <Slider
                   value={[v]}

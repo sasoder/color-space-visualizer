@@ -49,12 +49,12 @@ function RGBCubeContent({
     // Create vertex labels
     const vertices: Array<{ pos: [number, number, number]; label: string }> = [
       { pos: [0, 0, 0], label: "Black" },
-      { pos: [1, 0, 0], label: "Red" }, // Red on X axis
+      { pos: [1, 0, 0], label: "Green" }, // Green on X axis
       { pos: [0, 1, 0], label: "Blue" }, // Blue on Y axis
-      { pos: [0, 0, 1], label: "Green" }, // Green on Z axis
-      { pos: [1, 1, 0], label: "Magenta" }, // Red + Blue = Magenta
-      { pos: [1, 0, 1], label: "Yellow" }, // Red + Green = Yellow
-      { pos: [0, 1, 1], label: "Cyan" }, // Blue + Green = Cyan
+      { pos: [0, 0, 1], label: "Red" }, // Red on Z axis
+      { pos: [1, 1, 0], label: "Cyan" }, // Green + Blue = Cyan
+      { pos: [1, 0, 1], label: "Yellow" }, // Green + Red = Yellow
+      { pos: [0, 1, 1], label: "Magenta" }, // Blue + Red = Magenta
       { pos: [1, 1, 1], label: "White" },
     ];
 
@@ -102,7 +102,7 @@ function RGBCubeContent({
     if (!sceneRef.current?.currentPoint) return;
     const [r, g, b] = rgb;
     // Map RGB values to the new coordinate system
-    const position: [number, number, number] = [r / 255, b / 255, g / 255];
+    const position: [number, number, number] = [g / 255, b / 255, r / 255];
     sceneRef.current.currentPoint.position.set(
       position[0],
       position[1],
@@ -132,7 +132,7 @@ function RGBCubeContent({
 
       const [r, g, b] = color.rgb;
       // Map RGB values to the new coordinate system
-      const position: [number, number, number] = [r / 255, b / 255, g / 255];
+      const position: [number, number, number] = [g / 255, b / 255, r / 255];
 
       let point = points.get(color.id);
 
