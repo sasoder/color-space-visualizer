@@ -34,41 +34,74 @@ export default function Index() {
   // The current color mode is determined by the selected color's type
   const selectedColor = savedColors.find((c) => c.id === selectedId);
 
-  const handleColorChange = useCallback(
-    (newRgb: RGB) => {
-      setSavedColors((colors) =>
-        colors.map((color) =>
-          color.id === selectedId && color.type === "point"
-            ? { ...color, rgb: newRgb }
-            : color
-        )
-      );
+  // Add interpolation points between two RGB colors
+  const interpolatePoints = useCallback(
+    (color1: RGB, color2: RGB, steps: number): RGB[] => {
+      return Array.from({ length: steps }, (_, i) => {
+        const t = i / (steps - 1);
+        return [
+          Math.round(color1[0] + t * (color2[0] - color1[0])),
+          Math.round(color1[1] + t * (color2[1] - color1[1])),
+          Math.round(color1[2] + t * (color2[2] - color1[2])),
+        ] as RGB;
+      });
     },
-    [selectedId]
+    []
   );
-
-  const handleAddNewPoint = useCallback(() => {
-    const newPoint = {
-      id: `point-${Date.now()}`,
-      type: "point" as const,
-      rgb: [127, 127, 127] as RGB,
-      interpolated: false,
-    };
-    setSavedColors((colors) => [...colors, newPoint]);
-    setSelectedId(newPoint.id);
-  }, []);
 
   const handleRemoveColor = useCallback(
     (id: string) => {
       setSavedColors((colors) => {
+        // First remove the point
         const newColors = colors.filter((c) => c.id !== id);
         if (id === selectedId && newColors.length > 0) {
           setSelectedId(newColors[0].id);
         }
+
+        // If interpolation is enabled, update interpolated points
+        if (showInterpolation) {
+          const basePoints = newColors.filter(
+            (c): c is SavedPoint => c.type === "point" && !c.interpolated
+          );
+
+          if (basePoints.length >= 2) {
+            const newPoints: SavedPoint[] = [];
+
+            for (let i = 0; i < basePoints.length; i++) {
+              for (let j = i + 1; j < basePoints.length; j++) {
+                const interpolated = interpolatePoints(
+                  basePoints[i].rgb,
+                  basePoints[j].rgb,
+                  10
+                );
+
+                interpolated.slice(1, -1).forEach((rgb, index) => {
+                  newPoints.push({
+                    id: `interpolated-${basePoints[i].id}-${basePoints[j].id}-${index}`,
+                    type: "point",
+                    rgb,
+                    interpolated: true,
+                  });
+                });
+              }
+            }
+
+            return [
+              ...newColors.filter((c) => c.type === "point" && !c.interpolated),
+              ...newPoints,
+            ];
+          }
+
+          // If we have fewer than 2 points, turn off interpolation mode
+          if (basePoints.length < 2) {
+            setShowInterpolation(false);
+          }
+        }
+
         return newColors;
       });
     },
-    [selectedId]
+    [selectedId, showInterpolation, interpolatePoints, setShowInterpolation]
   );
 
   const handleDuplicateColor = useCallback((id: string) => {
@@ -89,20 +122,69 @@ export default function Index() {
     });
   }, []);
 
-  // Add interpolation points between two RGB colors
-  const interpolatePoints = useCallback(
-    (color1: RGB, color2: RGB, steps: number): RGB[] => {
-      return Array.from({ length: steps }, (_, i) => {
-        const t = i / (steps - 1);
-        return [
-          Math.round(color1[0] + t * (color2[0] - color1[0])),
-          Math.round(color1[1] + t * (color2[1] - color1[1])),
-          Math.round(color1[2] + t * (color2[2] - color1[2])),
-        ] as RGB;
+  const handleColorChange = useCallback(
+    (newRgb: RGB) => {
+      setSavedColors((colors) => {
+        // First update the selected color
+        const updatedColors = colors.map((color) =>
+          color.id === selectedId && color.type === "point"
+            ? { ...color, rgb: newRgb }
+            : color
+        );
+
+        // If interpolation is enabled, update interpolated points
+        if (showInterpolation) {
+          const basePoints = updatedColors.filter(
+            (c): c is SavedPoint => c.type === "point" && !c.interpolated
+          );
+
+          if (basePoints.length >= 2) {
+            const newPoints: SavedPoint[] = [];
+
+            for (let i = 0; i < basePoints.length; i++) {
+              for (let j = i + 1; j < basePoints.length; j++) {
+                const interpolated = interpolatePoints(
+                  basePoints[i].rgb,
+                  basePoints[j].rgb,
+                  10
+                );
+
+                interpolated.slice(1, -1).forEach((rgb, index) => {
+                  newPoints.push({
+                    id: `interpolated-${basePoints[i].id}-${basePoints[j].id}-${index}`,
+                    type: "point",
+                    rgb,
+                    interpolated: true,
+                  });
+                });
+              }
+            }
+
+            return [
+              ...updatedColors.filter(
+                (c) => c.type === "point" && !c.interpolated
+              ),
+              ...newPoints,
+            ];
+          }
+        }
+
+        return updatedColors;
       });
     },
-    []
+    [selectedId, showInterpolation, interpolatePoints]
   );
+
+  const handleAddNewPoint = useCallback(() => {
+    const newPoint = {
+      id: `point-${Date.now()}`,
+      type: "point" as const,
+      rgb: [127, 127, 127] as RGB,
+      interpolated: false,
+    };
+    setSavedColors((colors) => [...colors, newPoint]);
+    setSelectedId(newPoint.id);
+  }, []);
 
   // Update interpolation points whenever showInterpolation changes
   useEffect(() => {
@@ -195,6 +277,10 @@ export default function Index() {
               size="sm"
               onClick={() => setShowInterpolation(!showInterpolation)}
               className={showInterpolation ? "bg-black hover:bg-black/90" : ""}
+              disabled={
+                savedColors.filter((c) => c.type === "point" && !c.interpolated)
+                  .length < 2
+              }
             >
               <Grip
                 className={`h-4 w-4 ${

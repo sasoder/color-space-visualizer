@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { rgbToHls, rgbToHsv } from "@/lib/color-utils";
 
 interface SavedColorsListProps {
   colors: SavedColor[];
@@ -30,6 +31,8 @@ const ColorItem = ({
   onDuplicate: (id: string) => void;
 }) => {
   const bgColor = `rgb(${color.rgb.join(",")})`;
+  const [h, l, s] = rgbToHls(color.rgb[0], color.rgb[1], color.rgb[2]);
+  const [hv, sv, v] = rgbToHsv(color.rgb[0], color.rgb[1], color.rgb[2]);
 
   return (
     <div
@@ -48,9 +51,11 @@ const ColorItem = ({
         className="w-6 h-6 border border-black/10"
         style={{ background: bgColor }}
       />
-      <span className="flex-grow font-normal">
-        {color.interpolated ? "Interpolated" : "Point"}
-      </span>
+      <div className="flex-grow font-normal text-xs space-y-0.5">
+        <div>RGB: {color.rgb.map((v) => v.toFixed(0)).join(", ")}</div>
+        <div>HLS: {[h, l, s].map((v) => v.toFixed(0)).join(", ")}</div>
+        <div>HSV: {[hv, sv, v].map((v) => v.toFixed(0)).join(", ")}</div>
+      </div>
       <div className="flex gap-1">
         {color.type === "point" && !color.interpolated && (
           <Button
