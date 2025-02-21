@@ -98,35 +98,19 @@ export function SavedColorsList({
   const interpolatedColors = colors.filter((c) => c.interpolated);
 
   return (
-    <Accordion type="multiple" defaultValue={["points"]} className="space-y-4">
-      <AccordionItem value="points" className="border-none ">
-        <AccordionTrigger className="hover:no-underline py-0 border hover:border-black/20 border-transparent p-2">
-          <span className="text-sm font-medium">Control Points</span>
-        </AccordionTrigger>
-        <AccordionContent className="pt-4 pb-0">
-          <div className="space-y-3">
-            {pointColors.map((color) => (
-              <ColorItem
-                key={color.id}
-                color={color}
-                isSelected={color.id === selectedId}
-                onSelect={onSelect}
-                onRemove={onRemove}
-                onDuplicate={onDuplicate}
-              />
-            ))}
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-
-      {interpolatedColors.length > 0 && (
-        <AccordionItem value="interpolated" className="border-none">
+    <div className="h-full overflow-y-auto">
+      <Accordion
+        type="multiple"
+        defaultValue={["points"]}
+        className="space-y-4"
+      >
+        <AccordionItem value="points" className="border-none ">
           <AccordionTrigger className="hover:no-underline py-0 border hover:border-black/20 border-transparent p-2">
-            <span className="text-sm font-medium">Interpolated Points</span>
+            <span className="text-sm font-medium">Control Points</span>
           </AccordionTrigger>
           <AccordionContent className="pt-4 pb-0">
             <div className="space-y-3">
-              {interpolatedColors.map((color) => (
+              {pointColors.map((color) => (
                 <ColorItem
                   key={color.id}
                   color={color}
@@ -139,7 +123,29 @@ export function SavedColorsList({
             </div>
           </AccordionContent>
         </AccordionItem>
-      )}
-    </Accordion>
+
+        {interpolatedColors.length > 0 && (
+          <AccordionItem value="interpolated" className="border-none">
+            <AccordionTrigger className="hover:no-underline py-0 border hover:border-black/20 border-transparent p-2">
+              <span className="text-sm font-medium">Interpolated Points</span>
+            </AccordionTrigger>
+            <AccordionContent className="pt-4 pb-0">
+              <div className="space-y-3">
+                {interpolatedColors.map((color) => (
+                  <ColorItem
+                    key={color.id}
+                    color={color}
+                    isSelected={color.id === selectedId}
+                    onSelect={onSelect}
+                    onRemove={onRemove}
+                    onDuplicate={onDuplicate}
+                  />
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        )}
+      </Accordion>
+    </div>
   );
 }

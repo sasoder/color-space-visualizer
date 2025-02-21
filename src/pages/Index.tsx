@@ -323,7 +323,10 @@ export default function Index() {
                   <Plus className="h-4 w-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px] p-6">
+              <SheetContent
+                side="right"
+                className="w-[300px] sm:w-[400px] p-6 flex flex-col h-full"
+              >
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-2xl font-normal">Saved Colors</h2>
                   <Button
@@ -334,13 +337,15 @@ export default function Index() {
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
-                <SavedColorsList
-                  colors={savedColors}
-                  selectedId={selectedId}
-                  onSelect={setSelectedId}
-                  onRemove={handleRemoveColor}
-                  onDuplicate={handleDuplicateColor}
-                />
+                <div className="overflow-y-auto flex-1">
+                  <SavedColorsList
+                    colors={savedColors}
+                    selectedId={selectedId}
+                    onSelect={setSelectedId}
+                    onRemove={handleRemoveColor}
+                    onDuplicate={handleDuplicateColor}
+                  />
+                </div>
               </SheetContent>
             </Sheet>
           </div>
@@ -441,20 +446,22 @@ export default function Index() {
       </div>
 
       {/* Desktop Saved Colors List */}
-      <div className="w-80 flex-none p-8 overflow-y-auto hidden md:block">
-        <div className="flex justify-between items-center mb-6">
+      <div className="w-80 flex-none p-8 flex flex-col h-screen hidden md:flex">
+        <div className="flex justify-between items-center mb-6 flex-none">
           <h2 className="text-2xl font-normal">Saved Colors</h2>
           <Button variant="outline" size="sm" onClick={handleAddNewPoint}>
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-        <SavedColorsList
-          colors={savedColors}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-          onRemove={handleRemoveColor}
-          onDuplicate={handleDuplicateColor}
-        />
+        <div className="flex-1 min-h-0">
+          <SavedColorsList
+            colors={savedColors}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+            onRemove={handleRemoveColor}
+            onDuplicate={handleDuplicateColor}
+          />
+        </div>
       </div>
     </div>
   );
