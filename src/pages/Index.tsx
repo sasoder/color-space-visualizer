@@ -265,9 +265,9 @@ export default function Index() {
         <Separator />
 
         {/* Visualization Grid */}
-        <div className="flex-1 min-h-0 relative lg:mr-[0.25px] md:mr-0">
+        <div className="flex-1 min-h-0 flex flex-col relative lg:mr-[0.25px] md:mr-0">
           {/* Control Buttons */}
-          <div className="absolute top-[72px] md:top-4 left-4 right-4 z-10 flex justify-between">
+          <div className="flex-none absolute top-[72px] md:top-4 left-4 right-4 z-10 flex justify-between">
             <div className="flex gap-2">
               <Button
                 variant="outline"
@@ -317,7 +317,7 @@ export default function Index() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-transparent md:hidden text-sm"
+                  className="border-transparent md:hidden"
                 >
                   Add Colour
                   <Plus className="h-4 w-4" />
@@ -325,7 +325,7 @@ export default function Index() {
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px] p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-normal">Saved Colours</h2>
+                  <h2 className="text-2xl font-normal">Saved Colors</h2>
                   <Button
                     variant="outline"
                     size="sm"
@@ -378,45 +378,48 @@ export default function Index() {
               />
             </div>
           </div>
+
           {/* Mobile Layout (Vertical Stack) */}
-          <div className="md:hidden flex flex-col h-full pt-2">
-            <Tabs defaultValue="rgb" className="h-full flex flex-col">
-              <TabsList className="grid grid-cols-3 w-full gap-2 px-8 flex-none">
+          <div className="md:hidden flex flex-col flex-1 min-h-0 pt-2">
+            <Tabs defaultValue="rgb" className="flex flex-col flex-1 min-h-0">
+              <TabsList className="flex-none grid grid-cols-3 w-full gap-2 px-8">
                 <TabsTrigger value="rgb">RGB</TabsTrigger>
                 <TabsTrigger value="hls">HLS</TabsTrigger>
                 <TabsTrigger value="hsv">HSV</TabsTrigger>
               </TabsList>
               <Separator className="flex-none mt-2" />
-              <TabsContent value="rgb" className="flex-1 min-h-0 w-full mt-0">
-                <RGBCube
-                  rgb={currentRgb}
-                  savedColors={savedColors}
-                  selectedId={selectedId}
-                  shouldReset={shouldResetViews}
-                  onResetComplete={handleResetComplete}
-                  showGrid={showGrid}
-                />
-              </TabsContent>
-              <TabsContent value="hls" className="flex-1 min-h-0 w-full mt-0">
-                <HLSDiamond
-                  rgb={currentRgb}
-                  savedColors={savedColors}
-                  selectedId={selectedId}
-                  shouldReset={shouldResetViews}
-                  onResetComplete={handleResetComplete}
-                  showGrid={showGrid}
-                />
-              </TabsContent>
-              <TabsContent value="hsv" className="flex-1 min-h-0 w-full mt-0">
-                <HSVCone
-                  rgb={currentRgb}
-                  savedColors={savedColors}
-                  selectedId={selectedId}
-                  shouldReset={shouldResetViews}
-                  onResetComplete={handleResetComplete}
-                  showGrid={showGrid}
-                />
-              </TabsContent>
+              <div className="flex-1 min-h-0 relative">
+                <TabsContent value="rgb" className="absolute inset-0 mt-0">
+                  <RGBCube
+                    rgb={currentRgb}
+                    savedColors={savedColors}
+                    selectedId={selectedId}
+                    shouldReset={shouldResetViews}
+                    onResetComplete={handleResetComplete}
+                    showGrid={showGrid}
+                  />
+                </TabsContent>
+                <TabsContent value="hls" className="absolute inset-0 mt-0">
+                  <HLSDiamond
+                    rgb={currentRgb}
+                    savedColors={savedColors}
+                    selectedId={selectedId}
+                    shouldReset={shouldResetViews}
+                    onResetComplete={handleResetComplete}
+                    showGrid={showGrid}
+                  />
+                </TabsContent>
+                <TabsContent value="hsv" className="absolute inset-0 mt-0">
+                  <HSVCone
+                    rgb={currentRgb}
+                    savedColors={savedColors}
+                    selectedId={selectedId}
+                    shouldReset={shouldResetViews}
+                    onResetComplete={handleResetComplete}
+                    showGrid={showGrid}
+                  />
+                </TabsContent>
+              </div>
             </Tabs>
           </div>
         </div>
