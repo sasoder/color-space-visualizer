@@ -72,7 +72,7 @@ export default function Index() {
                 const interpolated = interpolatePoints(
                   basePoints[i].rgb,
                   basePoints[j].rgb,
-                  10
+                  15
                 );
 
                 interpolated.slice(1, -1).forEach((rgb, index) => {
@@ -146,7 +146,7 @@ export default function Index() {
                 const interpolated = interpolatePoints(
                   basePoints[i].rgb,
                   basePoints[j].rgb,
-                  10
+                  15
                 );
 
                 interpolated.slice(1, -1).forEach((rgb, index) => {
@@ -203,7 +203,7 @@ export default function Index() {
             const interpolated = interpolatePoints(
               basePoints[i].rgb,
               basePoints[j].rgb,
-              10 // Number of interpolation points including endpoints
+              15 // Number of interpolation points including endpoints
             );
 
             // Add interpolated points (excluding endpoints)
