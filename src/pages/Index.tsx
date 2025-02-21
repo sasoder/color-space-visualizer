@@ -257,7 +257,7 @@ export default function Index() {
         <Separator className="flex-none border-black/10" />
 
         {/* Visualization Grid */}
-        <div className="flex-1 min-h-0 relative">
+        <div className="flex-1 min-h-0 relative mr-[0.25px]">
           <div className="absolute top-4 left-4 z-10 flex gap-2">
             <Button variant="outline" size="sm" onClick={handleResetAllViews}>
               <RotateCcw className="h-4 w-4" />
