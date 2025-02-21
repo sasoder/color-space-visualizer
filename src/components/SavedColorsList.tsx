@@ -48,7 +48,7 @@ const ColorItem = ({
       onClick={() => onSelect(color.id)}
     >
       <div
-        className="w-6 h-6 border border-black/10"
+        className="w-6 h-6  ml-2 border border-black/10"
         style={{ background: bgColor }}
       />
       <div className="flex-grow font-normal text-xs space-y-0.5">
@@ -99,8 +99,8 @@ export function SavedColorsList({
 
   return (
     <Accordion type="multiple" defaultValue={["points"]} className="space-y-4">
-      <AccordionItem value="points" className="border-none">
-        <AccordionTrigger className="hover:no-underline py-0">
+      <AccordionItem value="points" className="border-none ">
+        <AccordionTrigger className="hover:no-underline py-0 border hover:border-black/20 border-transparent p-2">
           <span className="text-sm font-medium">Control Points</span>
         </AccordionTrigger>
         <AccordionContent className="pt-4 pb-0">
@@ -121,7 +121,7 @@ export function SavedColorsList({
 
       {interpolatedColors.length > 0 && (
         <AccordionItem value="interpolated" className="border-none">
-          <AccordionTrigger className="hover:no-underline py-0">
+          <AccordionTrigger className="hover:no-underline py-0 border hover:border-black/20 border-transparent p-2">
             <span className="text-sm font-medium">Interpolated Points</span>
           </AccordionTrigger>
           <AccordionContent className="pt-4 pb-0">
