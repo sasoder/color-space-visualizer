@@ -251,7 +251,7 @@ export default function Index() {
             <div className="flex flex-row items-center justify-center w-full">
               <div className="flex items-center gap-2">
                 <div className="text-2xl md:text-4xl font-normal text-black text-center">
-                  Colour Space Visualiser
+                  Color Space Visualizer
                 </div>
                 <img
                   src="/favicon.png"
@@ -261,7 +261,7 @@ export default function Index() {
               </div>
             </div>
             <p className="text-sm text-gray-500">
-              A visualisation of different colour spaces. With the font Tinos.
+              A visualization of different color spaces. With the font Tinos.
             </p>
           </div>
         </header>
@@ -323,7 +323,7 @@ export default function Index() {
                   size="sm"
                   className="border-transparent md:hidden text-sm"
                 >
-                  Add Colour
+                  Add Color
                   <Plus className="h-4 w-4" />
                 </Button>
               </SheetTrigger>
@@ -332,7 +332,7 @@ export default function Index() {
                 className="w-[300px] sm:w-[400px] p-6 flex flex-col h-full"
               >
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-normal">Saved Colours</h2>
+                  <h2 className="text-2xl font-normal">Saved Colors</h2>
                   <Button
                     variant="outline"
                     size="sm"
@@ -452,7 +452,7 @@ export default function Index() {
       {/* Desktop Saved Colors List */}
       <div className="w-80 flex-none p-8 py-0 flex flex-col h-screen hidden md:flex">
         <div className="flex justify-between items-center mb-6 flex-none mt-6">
-          <h2 className="text-2xl font-normal">Saved Colours</h2>
+          <h2 className="text-2xl font-normal">Saved Colors</h2>
           <Button variant="outline" size="sm" onClick={handleAddNewPoint}>
             <Plus className="h-4 w-4" />
           </Button>

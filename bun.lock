@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "color-space-visualiser",
+      "name": "color-space-visualizer",
       "dependencies": {
         "@fontsource/tinos": "^5.1.1",
         "@radix-ui/react-accordion": "^1.2.3",
