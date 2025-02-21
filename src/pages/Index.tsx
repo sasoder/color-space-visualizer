@@ -317,7 +317,7 @@ export default function Index() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-transparent md:hidden"
+                  className="border-transparent md:hidden text-sm"
                 >
                   Add Colour
                   <Plus className="h-4 w-4" />
@@ -388,7 +388,10 @@ export default function Index() {
                 <TabsTrigger value="hsv">HSV</TabsTrigger>
               </TabsList>
               <Separator className="flex-none mt-2" />
-              <div className="flex-1 min-h-0 relative">
+              <div
+                className="flex-1 min-h-0 relative"
+                style={{ height: "calc(100vh - 300px)" }}
+              >
                 <TabsContent value="rgb" className="absolute inset-0 mt-0">
                   <RGBCube
                     rgb={currentRgb}
