@@ -19,6 +19,7 @@ interface ColorControlsProps {
 export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
   const [previousHsl, setPreviousHsl] = React.useState(0);
   const [previousHsv, setPreviousHsv] = React.useState(0);
+  const [emptyInputs, setEmptyInputs] = React.useState<Set<string>>(new Set());
 
   const [h, l, s] = rgbToHls(rgb[0], rgb[1], rgb[2], previousHsl);
   const [hv, sv, v] = rgbToHsv(rgb[0], rgb[1], rgb[2], previousHsv);
@@ -56,6 +57,19 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
     index: number,
     type: "rgb" | "hls" | "hsv"
   ) => {
+    const inputId = `${type}-${index}`;
+
+    if (value === "") {
+      setEmptyInputs((prev) => new Set(prev).add(inputId));
+      return;
+    }
+
+    setEmptyInputs((prev) => {
+      const next = new Set(prev);
+      next.delete(inputId);
+      return next;
+    });
+
     const numValue = parseInt(value) || 0;
     let clampedValue = numValue;
 
@@ -79,6 +93,29 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
     }
   };
 
+  const handleInputBlur = (index: number, type: "rgb" | "hls" | "hsv") => {
+    const inputId = `${type}-${index}`;
+    if (emptyInputs.has(inputId)) {
+      setEmptyInputs((prev) => {
+        const next = new Set(prev);
+        next.delete(inputId);
+        return next;
+      });
+
+      if (type === "rgb") {
+        handleRgbChange(index, [0]);
+      } else if (type === "hls") {
+        handleHlsChange(index, [0]);
+      } else if (type === "hsv") {
+        handleHsvChange(index, [0]);
+      }
+    }
+  };
+
+  const getInputValue = (value: number, inputId: string) => {
+    return emptyInputs.has(inputId) ? "" : Math.round(value);
+  };
+
   const paperSliderStyle =
     "hover:bg-black/5 rounded-sm [&_[role=slider]]:rounded-sm [&_[role=slider]]:border-black/20 [&_[role=slider]]:shadow-sm [&_[role=slider]]:hover:border-black/40 [&_[role=track]]:bg-black/10 [&_[role=range]]:bg-black/20";
 
@@ -96,13 +133,14 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   <Label className="text-sm font-normal">Red</Label>
                   <Input
                     type="number"
-                    value={Math.round(rgb[0])}
+                    value={getInputValue(rgb[0], "rgb-0")}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       handleNumericInput(e.target.value, 0, "rgb")
                     }
                     className={inputStyle}
                     min={0}
                     max={255}
+                    onBlur={() => handleInputBlur(0, "rgb")}
                   />
                 </div>
                 <Slider
@@ -118,13 +156,14 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   <Label className="text-sm font-normal">Green</Label>
                   <Input
                     type="number"
-                    value={Math.round(rgb[1])}
+                    value={getInputValue(rgb[1], "rgb-1")}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       handleNumericInput(e.target.value, 1, "rgb")
                     }
                     className={inputStyle}
                     min={0}
                     max={255}
+                    onBlur={() => handleInputBlur(1, "rgb")}
                   />
                 </div>
                 <Slider
@@ -140,13 +179,14 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   <Label className="text-sm font-normal">Blue</Label>
                   <Input
                     type="number"
-                    value={Math.round(rgb[2])}
+                    value={getInputValue(rgb[2], "rgb-2")}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       handleNumericInput(e.target.value, 2, "rgb")
                     }
                     className={inputStyle}
                     min={0}
                     max={255}
+                    onBlur={() => handleInputBlur(2, "rgb")}
                   />
                 </div>
                 <Slider
@@ -169,13 +209,14 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   <div className="flex items-center">
                     <Input
                       type="number"
-                      value={Math.round(h)}
+                      value={getInputValue(h, "hls-0")}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         handleNumericInput(e.target.value, 0, "hls")
                       }
                       className={inputStyle}
                       min={0}
                       max={359}
+                      onBlur={() => handleInputBlur(0, "hls")}
                     />
                     <span className="ml-1 text-sm text-black/60">°</span>
                   </div>
@@ -194,13 +235,14 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   <div className="flex items-center">
                     <Input
                       type="number"
-                      value={Math.round(l)}
+                      value={getInputValue(l, "hls-1")}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         handleNumericInput(e.target.value, 1, "hls")
                       }
                       className={inputStyle}
                       min={0}
                       max={100}
+                      onBlur={() => handleInputBlur(1, "hls")}
                     />
                     <span className="ml-1 text-sm text-black/60">%</span>
                   </div>
@@ -219,13 +261,14 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   <div className="flex items-center">
                     <Input
                       type="number"
-                      value={Math.round(s)}
+                      value={getInputValue(s, "hls-2")}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         handleNumericInput(e.target.value, 2, "hls")
                       }
                       className={inputStyle}
                       min={0}
                       max={100}
+                      onBlur={() => handleInputBlur(2, "hls")}
                     />
                     <span className="ml-1 text-sm text-black/60">%</span>
                   </div>
@@ -250,13 +293,14 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   <div className="flex items-center">
                     <Input
                       type="number"
-                      value={Math.round(hv)}
+                      value={getInputValue(hv, "hsv-0")}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         handleNumericInput(e.target.value, 0, "hsv")
                       }
                       className={inputStyle}
                       min={0}
                       max={359}
+                      onBlur={() => handleInputBlur(0, "hsv")}
                     />
                     <span className="ml-1 text-sm text-black/60">°</span>
                   </div>
@@ -275,13 +319,14 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   <div className="flex items-center">
                     <Input
                       type="number"
-                      value={Math.round(sv)}
+                      value={getInputValue(sv, "hsv-1")}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         handleNumericInput(e.target.value, 1, "hsv")
                       }
                       className={inputStyle}
                       min={0}
                       max={100}
+                      onBlur={() => handleInputBlur(1, "hsv")}
                     />
                     <span className="ml-1 text-sm text-black/60">%</span>
                   </div>
@@ -300,13 +345,14 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   <div className="flex items-center">
                     <Input
                       type="number"
-                      value={Math.round(v)}
+                      value={getInputValue(v, "hsv-2")}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         handleNumericInput(e.target.value, 2, "hsv")
                       }
                       className={inputStyle}
                       min={0}
                       max={100}
+                      onBlur={() => handleInputBlur(2, "hsv")}
                     />
                     <span className="ml-1 text-sm text-black/60">%</span>
                   </div>

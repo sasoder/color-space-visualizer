@@ -47,7 +47,7 @@ function HLSDiamondContent({
     // Create vertex labels
     // Use a 30° offset so that the vertices line up with the following mapping:
     // Blue: 30°, Cyan: 90°, Green: 150°, Yellow: 210°, Red: 270°, Magenta: 330°.
-    const ROTATION_OFFSET = Math.PI / 6; // 30 degrees offset
+    const ROTATION_OFFSET = Math.PI / 2; // 30 degrees offset
 
     // Calculated vertex positions
     const vertices = [
@@ -269,10 +269,12 @@ function createDiamondGeometry(scene: THREE.Scene): THREE.Group {
   // Top cone (upper half)
   const upperCone = new THREE.LineSegments(edgesGeometry.clone(), material);
   upperCone.position.set(CENTER_X, Y_POS_TOP, CENTER_Z);
+  // upperCone.rotation.y = Math.PI / 2;
 
   // Bottom cone (inverted lower half)
   const lowerCone = new THREE.LineSegments(edgesGeometry.clone(), material);
   lowerCone.rotation.x = Math.PI;
+  // lowerCone.rotation.y = Math.PI / 2;
   lowerCone.position.set(CENTER_X, Y_POS_BOTTOM, CENTER_Z);
 
   group.add(upperCone);
@@ -301,7 +303,7 @@ function hlsToCartesian(
   // Adjust the angle so that red (0°) goes to 270°,
   // yellow (60°) to 210°, green (120°) to 150°, etc.
   const angleDegrees = 270 - hueDegrees;
-  const angle = angleDegrees * (Math.PI / 180);
+  const angle = angleDegrees * (Math.PI / 180) + Math.PI / 3;
 
   // Map lightness linearly to the vertical position between Y_POS_BOTTOM and Y_POS_TOP.
   const y = Y_POS_BOTTOM - 0.5 + (Y_POS_TOP - Y_POS_BOTTOM) * l * 2;
