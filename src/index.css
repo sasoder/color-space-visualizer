@@ -20,7 +20,7 @@
   --accent-foreground: 360 0% 10%;
   --destructive: 0 50% 30%;
   --destructive-foreground: 360 0% 90%;
-  --border: 360 20% 50%;
+  --border: 360 10% 65%;
   --input: 360 20% 18%;
   --ring: 360 0% 0%;
   --radius: 0.5rem;
@@ -42,7 +42,7 @@
   --accent-foreground: 360 0% 90%;
   --destructive: 0 50% 30%;
   --destructive-foreground: 360 0% 90%;
-  --border: 360 20% 18%;
+  --border: 360 10% 65%;
   --input: 360 20% 18%;
   --ring: 360 0% 0%;
   --radius: 0.5rem;
@@ -50,14 +50,12 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border border-opacity-50;
   }
   body {
     @apply bg-background text-foreground;
   }
 }
-
-
 
 @layer base {
   * {

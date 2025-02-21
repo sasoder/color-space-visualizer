@@ -262,7 +262,7 @@ export default function Index() {
           </div>
         </header>
 
-        <Separator className="flex-none border-black/10" />
+        <Separator className="flex-none" />
 
         {/* Visualization Grid */}
         <div className="flex-1 min-h-0 relative lg:mr-[0.25px] md:mr-0">
@@ -427,7 +427,7 @@ export default function Index() {
           </div>
         </div>
 
-        <Separator className="flex-none border-black/10" />
+        <Separator className="flex-none" />
 
         {/* Controls */}
         <div className="flex-none">
@@ -437,10 +437,7 @@ export default function Index() {
 
       {/* Desktop Saved Colors Panel */}
       <div className="flex-none hidden md:block">
-        <Separator
-          orientation="vertical"
-          className="h-full border-black/10 p-0"
-        />
+        <Separator orientation="vertical" className="h-full p-0" />
       </div>
 
       {/* Desktop Saved Colors List */}
