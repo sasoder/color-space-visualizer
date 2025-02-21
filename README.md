@@ -1,50 +1,48 @@
-# React + TypeScript + Vite
+# Color Space Visualizer <img src="public/favicon.png" alt="favicon" width="32" height="32" style="vertical-align: middle;">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A 3D tool for exploring RGB, HLS, and HSV color spaces in real-time. Built in a day, so please don't look at the code.
 
-Currently, two official plugins are available:
+Check it out here: [color-space-visualizer.pages.dev](https://color-space-visualizer.pages.dev/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## What it looks like
 
-## Expanding the ESLint configuration
+![desktop](/img/desktop.png)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+<details>
+<summary>Mobile screenshots</summary>
 
-- Configure the top-level `parserOptions` property like this:
+![mobile](/img/mobile1.png)
+![mobile](/img/mobile2.png)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+</details>
+
+## What you can do
+
+- Explore different 3D color models (RGB cube, HLS double cone, HSV cone)
+- Full 3D camera controls (rotate, zoom, pan)
+- Switch between color spaces with real-time updates
+- Save colors as points in 3D space
+- Create interpolated colors between saved points
+- Toggle grid overlay for reference
+- Use it on your phone, I actually made it responsive
+
+## Running it locally
+
+You can use any JS runtime (I used Bun). Then:
+
+```bash
+git clone https://github.com/sasoder/color-space-visualizer.git
+cd color-space-visualizer
+bun install
+bun dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Head to `http://localhost:5173` and you're good to go.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Credits
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+Shoutout Tino Weinkauf for the course DD2258 that inspired this.
+
+## License
+
+MIT License

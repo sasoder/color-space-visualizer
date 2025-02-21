@@ -329,9 +329,9 @@ export default function Index() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[300px] sm:w-[400px] p-6 flex flex-col h-full"
+                className="w-[300px] sm:w-[400px] p-6 py-0 flex flex-col h-full"
               >
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex justify-between items-center mb-6 mt-6">
                   <h2 className="text-2xl font-normal">Saved Colors</h2>
                   <Button
                     variant="outline"
