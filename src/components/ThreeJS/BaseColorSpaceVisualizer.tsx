@@ -257,7 +257,7 @@ export function createVertexLabel(
   canvas.width = 256;
   canvas.height = 64;
   context.fillStyle = "black";
-  context.font = "48px 'Tinos', serif";
+  context.font = "100 48px 'Tinos', serif";
   context.textAlign = "center";
   context.textBaseline = "middle";
   context.fillText(label, canvas.width / 2, canvas.height / 2);

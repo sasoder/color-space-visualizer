@@ -413,19 +413,20 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
         <Popover>
           <PopoverTrigger asChild>
             <button
-              className="w-12 h-12 border border-black/10 border-solid"
+              className="w-12 h-12 border border-black/30 border-solid"
               style={{ background: `rgb(${rgb.join(",")})` }}
             />
           </PopoverTrigger>
           <PopoverContent
-            className="w-auto border-black/10 p-0 shadow-xl shadow-black/25"
-            align="center"
+            className="w-auto p-0 border border-black/30 rounded-none"
+            align="end"
+            alignOffset={-50}
             side="right"
             sideOffset={10}
             style={{ background: "transparent" }}
           >
             <div
-              className="sketch-picker-wrapper"
+              className="sketch-picker-wrapper rounded-none"
               style={{ background: "hsl(40, 20%, 94%)" }}
             >
               <SketchPicker
@@ -436,6 +437,10 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   default: {
                     picker: {
                       background: "hsl(40, 20%, 94%)",
+                      borderRadius: "0px",
+                    },
+                    saturation: {
+                      border: "1px solid #00000055",
                     },
                   },
                 }}
@@ -450,19 +455,19 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
         <Popover>
           <PopoverTrigger asChild>
             <button
-              className="w-12 h-12 border border-black/10 border-solid shadow-lg"
+              className="w-12 h-12 border border-black/30 border-solid shadow-lg"
               style={{ background: `rgb(${rgb.join(",")})` }}
             />
           </PopoverTrigger>
           <PopoverContent
-            className="w-auto border-black/10 p-0 shadow-xl shadow-black/25"
+            className="w-auto p-0 border border-black/30 rounded-none"
             align="end"
             side="top"
             sideOffset={16}
             style={{ background: "transparent" }}
           >
             <div
-              className="sketch-picker-wrapper"
+              className="sketch-picker-wrapper rounded-none"
               style={{ background: "hsl(40, 20%, 94%)" }}
             >
               <SketchPicker
@@ -473,6 +478,10 @@ export const ColorControls = ({ rgb, onChange }: ColorControlsProps) => {
                   default: {
                     picker: {
                       background: "hsl(40, 20%, 94%)",
+                      borderRadius: "0px",
+                    },
+                    saturation: {
+                      border: "1px solid #00000055",
                     },
                   },
                 }}
