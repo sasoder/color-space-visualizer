@@ -247,7 +247,7 @@ export default function Index() {
             <div className="flex flex-row items-center justify-center w-full">
               <div className="flex items-center gap-2">
                 <div className="text-2xl md:text-4xl font-normal text-black text-center">
-                  Color Space Visualiser
+                  Colour Space Visualiser
                 </div>
                 <img
                   src="/favicon.png"
@@ -257,23 +257,23 @@ export default function Index() {
               </div>
             </div>
             <p className="text-sm text-gray-500">
-              A visualisation of different color spaces. With the font Tinos.
+              A visualisation of different colour spaces. With the font Tinos.
             </p>
           </div>
         </header>
 
-        <Separator className="flex-none" />
+        <Separator />
 
         {/* Visualization Grid */}
         <div className="flex-1 min-h-0 relative lg:mr-[0.25px] md:mr-0">
           {/* Control Buttons */}
-          <div className="absolute top-16 md:top-4 left-4 right-4 z-10 flex justify-between">
+          <div className="absolute top-[72px] md:top-4 left-4 right-4 z-10 flex justify-between">
             <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleResetAllViews}
-                className="md:border-transparent border-input"
+                className="border-transparent"
               >
                 <RotateCcw className="h-4 w-4" />
               </Button>
@@ -281,7 +281,7 @@ export default function Index() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowGrid(!showGrid)}
-                className={`md:border-transparent border-input ${
+                className={`border-transparent ${
                   showGrid ? "bg-black hover:bg-black/90" : ""
                 }`}
               >
@@ -295,7 +295,7 @@ export default function Index() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowInterpolation(!showInterpolation)}
-                className={`md:border-transparent border-input ${
+                className={`border-transparent ${
                   showInterpolation ? "bg-black hover:bg-black/90" : ""
                 }`}
                 disabled={
@@ -311,19 +311,21 @@ export default function Index() {
                 />
               </Button>
             </div>
+
             <Sheet>
               <SheetTrigger asChild>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="md:border-transparent border-input md:hidden"
+                  className="border-transparent md:hidden text-sm"
                 >
+                  Add Colour
                   <Plus className="h-4 w-4" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px] p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-normal">Saved Colors</h2>
+                  <h2 className="text-2xl font-normal">Saved Colours</h2>
                   <Button
                     variant="outline"
                     size="sm"
@@ -379,15 +381,13 @@ export default function Index() {
           {/* Mobile Layout (Vertical Stack) */}
           <div className="md:hidden flex flex-col h-full pt-2">
             <Tabs defaultValue="rgb" className="h-full flex flex-col">
-              <TabsList className="grid grid-cols-3 w-full gap-2 px-8">
+              <TabsList className="grid grid-cols-3 w-full gap-2 px-8 flex-none">
                 <TabsTrigger value="rgb">RGB</TabsTrigger>
                 <TabsTrigger value="hls">HLS</TabsTrigger>
                 <TabsTrigger value="hsv">HSV</TabsTrigger>
               </TabsList>
-              <TabsContent
-                value="rgb"
-                className="h-[40vh] md:h-[45vh] flex-1 w-full"
-              >
+              <Separator className="flex-none mt-2" />
+              <TabsContent value="rgb" className="flex-1 min-h-0 w-full mt-0">
                 <RGBCube
                   rgb={currentRgb}
                   savedColors={savedColors}
@@ -397,10 +397,7 @@ export default function Index() {
                   showGrid={showGrid}
                 />
               </TabsContent>
-              <TabsContent
-                value="hls"
-                className="h-[40vh] md:h-[45vh] flex-1 w-full"
-              >
+              <TabsContent value="hls" className="flex-1 min-h-0 w-full mt-0">
                 <HLSDiamond
                   rgb={currentRgb}
                   savedColors={savedColors}
@@ -410,10 +407,7 @@ export default function Index() {
                   showGrid={showGrid}
                 />
               </TabsContent>
-              <TabsContent
-                value="hsv"
-                className="h-[40vh] md:h-[45vh] flex-1 w-full"
-              >
+              <TabsContent value="hsv" className="flex-1 min-h-0 w-full mt-0">
                 <HSVCone
                   rgb={currentRgb}
                   savedColors={savedColors}
