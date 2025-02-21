@@ -4,6 +4,7 @@ export type SavedPoint = {
   id: string;
   type: "point";
   rgb: RGB;
+  interpolated: boolean;
 };
 
 export type SavedVolume = {
@@ -13,6 +14,6 @@ export type SavedVolume = {
   endRgb: RGB;
 };
 
-export type SavedColor = SavedPoint | SavedVolume;
+export type SavedColor = SavedPoint;
 
 export type ColorMode = "point" | "volume";
