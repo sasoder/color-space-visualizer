@@ -65,9 +65,9 @@ function HSVConeContent({
       // Yellow (60°)
       {
         pos: [
-          CENTER_X + CONE_RADIUS * Math.cos(Math.PI / 3),
+          CENTER_X + CONE_RADIUS * Math.cos(-Math.PI / 3),
           Y_POS_TOP + Y_OFFSET,
-          CENTER_Z + CONE_RADIUS * Math.sin(Math.PI / 3),
+          CENTER_Z + CONE_RADIUS * Math.sin(-Math.PI / 3),
         ] as [number, number, number],
         label: "Yellow",
       },
@@ -75,9 +75,9 @@ function HSVConeContent({
       // Green (120°)
       {
         pos: [
-          CENTER_X + CONE_RADIUS * Math.cos((2 * Math.PI) / 3),
+          CENTER_X + CONE_RADIUS * Math.cos((-2 * Math.PI) / 3),
           Y_POS_TOP + Y_OFFSET,
-          CENTER_Z + CONE_RADIUS * Math.sin((2 * Math.PI) / 3),
+          CENTER_Z + CONE_RADIUS * Math.sin((-2 * Math.PI) / 3),
         ] as [number, number, number],
         label: "Green",
       },
@@ -93,18 +93,18 @@ function HSVConeContent({
       // Blue (240°)
       {
         pos: [
-          CENTER_X + CONE_RADIUS * Math.cos((4 * Math.PI) / 3),
+          CENTER_X + CONE_RADIUS * Math.cos((-4 * Math.PI) / 3),
           Y_POS_TOP + Y_OFFSET,
-          CENTER_Z + CONE_RADIUS * Math.sin((4 * Math.PI) / 3),
+          CENTER_Z + CONE_RADIUS * Math.sin((-4 * Math.PI) / 3),
         ] as [number, number, number],
         label: "Blue",
       },
       // Magenta (300°)
       {
         pos: [
-          CENTER_X + CONE_RADIUS * Math.cos((5 * Math.PI) / 3),
+          CENTER_X + CONE_RADIUS * Math.cos((-5 * Math.PI) / 3),
           Y_POS_TOP + Y_OFFSET,
-          CENTER_Z + CONE_RADIUS * Math.sin((5 * Math.PI) / 3),
+          CENTER_Z + CONE_RADIUS * Math.sin((-5 * Math.PI) / 3),
         ] as [number, number, number],
         label: "Magenta",
       },
@@ -257,7 +257,7 @@ function createConeGeometry(scene: THREE.Scene): THREE.Group {
 
   // Position the cone with its base at the top (white) and tip at the bottom (black)
   cone.rotation.x = Math.PI; // Rotate 180 degrees to point downward
-  cone.rotation.y = Math.PI / 6;
+  cone.rotation.y = -Math.PI / 5;
   cone.position.set(CENTER_X, Y_POS_TOP + Y_OFFSET - 0.5, CENTER_Z);
 
   group.add(cone);
@@ -272,8 +272,8 @@ function hsvToCartesian(
   s: number, // 0-1 (representing saturation from 0-100%)
   v: number // 0-1 (representing value from 0-100%)
 ): [number, number, number] {
-  // Convert normalized hue to radians
-  const angle = h * 2 * Math.PI;
+  // Convert normalized hue to radians (negative angle for counterclockwise rotation)
+  const angle = -h * 2 * Math.PI;
 
   // Value determines the height (y-coordinate)
   const y = Y_POS_BOTTOM + Y_OFFSET + (Y_POS_TOP - Y_POS_BOTTOM) * v;
