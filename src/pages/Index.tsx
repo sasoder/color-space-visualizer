@@ -238,7 +238,7 @@ export default function Index() {
     selectedColor?.type === "point" ? selectedColor.rgb : [127, 127, 127];
 
   return (
-    <div className="h-screen w-full flex overflow-hidden">
+    <div className="min-h-screen w-full flex overflow-hidden">
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
@@ -265,7 +265,7 @@ export default function Index() {
         <Separator className="flex-none border-black/10" />
 
         {/* Visualization Grid */}
-        <div className="flex-1 min-h-0 relative mr-[0.25px]">
+        <div className="flex-1 min-h-0 relative lg:mr-[0.25px] md:mr-0">
           {/* Control Buttons */}
           <div className="absolute top-16 md:top-4 left-4 right-4 z-10 flex justify-between">
             <div className="flex gap-2">
@@ -384,7 +384,7 @@ export default function Index() {
                 <TabsTrigger value="hls">HLS</TabsTrigger>
                 <TabsTrigger value="hsv">HSV</TabsTrigger>
               </TabsList>
-              <TabsContent value="rgb" className="h-[45vh] flex-1">
+              <TabsContent value="rgb" className="h-[40vh] md:h-[45vh] flex-1">
                 <RGBCube
                   rgb={currentRgb}
                   savedColors={savedColors}
@@ -394,7 +394,7 @@ export default function Index() {
                   showGrid={showGrid}
                 />
               </TabsContent>
-              <TabsContent value="hls" className="h-[45vh] flex-1">
+              <TabsContent value="hls" className="h-[40vh] md:h-[45vh] flex-1">
                 <HLSDiamond
                   rgb={currentRgb}
                   savedColors={savedColors}
@@ -404,7 +404,7 @@ export default function Index() {
                   showGrid={showGrid}
                 />
               </TabsContent>
-              <TabsContent value="hsv" className="h-[45vh] flex-1">
+              <TabsContent value="hsv" className="h-[40vh] md:h-[45vh] flex-1">
                 <HSVCone
                   rgb={currentRgb}
                   savedColors={savedColors}
